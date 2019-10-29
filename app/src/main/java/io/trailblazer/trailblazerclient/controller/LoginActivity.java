@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import io.trailblazer.trailblazerclient.MainActivity;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.service.GoogleSignInService;
 
