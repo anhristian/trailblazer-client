@@ -13,7 +13,6 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import io.trailblazer.trailblazerclient.BuildConfig;
 
-
 public class GoogleSignInService {
 
   private static Application applicationContext;
