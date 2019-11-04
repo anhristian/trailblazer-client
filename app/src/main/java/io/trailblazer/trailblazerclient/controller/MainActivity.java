@@ -2,8 +2,12 @@ package io.trailblazer.trailblazerclient.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProviders;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -27,11 +31,20 @@ public class MainActivity extends AppCompatActivity
     mTextMessage = findViewById(R.id.message);
     BottomNavigationView navigation = findViewById(R.id.navigation);
     navigation.setOnNavigationItemSelectedListener(this);
+    setupViewModel();
   }
+  private void setupViewModel() {
+    viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+  }
+
 
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+    viewModel.printOauth();
     switch (item.getItemId()) {
+
+
+
       case R.id.navigation_home:
         mTextMessage.setText(R.string.title_home);
         return true;
@@ -71,8 +84,8 @@ public class MainActivity extends AppCompatActivity
     signInService = GoogleSignInService.getInstance();
     // FIXME Re-enable after view model implemented.
 
-//    signInService.getAccount().observe(this, (account) ->
-//        viewModel.setAccount(account));
+    signInService.getAccount().observe(this, (account) ->
+        viewModel.setAccount(account));
   }
 
   private void signOut() {

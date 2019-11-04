@@ -36,4 +36,7 @@ public class MainViewModel extends AndroidViewModel {
   }
 
 
+  public void printOauth() {
+    getAuthorizationHeader(account.getValue());
+  }
 }
