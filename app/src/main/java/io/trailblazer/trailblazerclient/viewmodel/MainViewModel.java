@@ -11,6 +11,7 @@ import io.trailblazer.trailblazerclient.R;
 
 public class MainViewModel extends AndroidViewModel {
 
+  private static final String LOG_TAG = "VIEWMODEL";
   private final MutableLiveData<GoogleSignInAccount> account =
       new MutableLiveData<>();
   private final MutableLiveData<Throwable> throwable =
@@ -31,7 +32,7 @@ public class MainViewModel extends AndroidViewModel {
 
   private String getAuthorizationHeader(GoogleSignInAccount account) {
     String token = getApplication().getString(R.string.oauth_header, account.getIdToken());
-    Log.d("OAuth2.0 token", token); // FIXME Remove before shipping.
+    Log.d("OAuth2.0 token", token);
     return token;
   }
 
