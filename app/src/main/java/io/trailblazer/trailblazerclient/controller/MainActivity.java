@@ -18,14 +18,14 @@ public class MainActivity extends AppCompatActivity
 
   private MainViewModel viewModel;
   private GoogleSignInService signInService;
-  private TextView mTextMessage;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     setupSignIn();
-    mTextMessage = findViewById(R.id.message);
+
     BottomNavigationView navigation = findViewById(R.id.navigation);
     navigation.setOnNavigationItemSelectedListener(this);
     setupViewModel();
@@ -40,13 +40,13 @@ public class MainActivity extends AppCompatActivity
 
     switch (item.getItemId()) {
       case R.id.navigation_home:
-        mTextMessage.setText(R.string.title_home);
+
         return true;
       case R.id.navigation_dashboard:
-        mTextMessage.setText(R.string.title_dashboard);
+
         return true;
       case R.id.navigation_notifications:
-        mTextMessage.setText(R.string.title_notifications);
+
         return true;
     }
     return false;
