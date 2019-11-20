@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity
 
   private void setupSignIn() {
     signInService = GoogleSignInService.getInstance();
-    // FIXME Re-enable after view model implemented.
 
     signInService.getAccount().observe(this, (account) -> {
           viewModel.setAccount(account);
