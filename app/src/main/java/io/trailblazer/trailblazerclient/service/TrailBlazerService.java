@@ -19,6 +19,7 @@ public interface TrailBlazerService {
   Observable<List<Trail>> getTrailsByName(@Header("Authorization") String token, @Query("name") String name);
 
 
+
   static TrailBlazerService getInstance() {
     return InstanceHolder.INSTANCE;
   }

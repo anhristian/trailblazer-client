@@ -4,6 +4,11 @@ package io.trailblazer.trailblazerclient.service;
 import android.app.Application;
 import android.content.Context;
 import android.os.Vibrator;
+import io.reactivex.Observable;
+import io.trailblazer.trailblazerclient.model.Trail;
+import java.util.List;
+import retrofit2.http.GET;
+import retrofit2.http.Header;
 
 public class MapsService {
 
@@ -26,6 +31,10 @@ public class MapsService {
   public static MapsService getInstance() {
     return MapsService.InstanceHolder.INSTANCE;
   }
+
+
+
+
 
   private static class InstanceHolder {
 
