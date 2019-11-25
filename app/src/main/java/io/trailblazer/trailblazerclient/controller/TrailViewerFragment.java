@@ -1,5 +1,6 @@
 package io.trailblazer.trailblazerclient.controller;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,8 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.trailblazer.trailblazerclient.R;
+import io.trailblazer.trailblazerclient.view.TrailAdapter;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 
 public class TrailViewerFragment extends Fragment {
@@ -18,6 +21,7 @@ public class TrailViewerFragment extends Fragment {
   private RecyclerView recyclerView;
   private View view;
   private TrailViewViewModel viewModel;
+  private Context context;
 
   public TrailViewerFragment() {
 
@@ -28,7 +32,9 @@ public class TrailViewerFragment extends Fragment {
       Bundle savedInstanceState) {
     viewModel = ViewModelProviders.of(this).get(TrailViewViewModel.class);
     view = inflater.inflate(R.layout.trail_view_fragment, container, false);
+    context = container.getContext();
     recyclerView = view.findViewById(R.id.trail_view);
+    viewModel.refreshPublicTrails();
     return view;
   }
 
@@ -50,10 +56,12 @@ public class TrailViewerFragment extends Fragment {
 //      GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), images);
 //      recyclerView.setAdapter(galleryAdapter);
 //    });
-
-    viewModel.getPublicTrails().observe(this, (trails -> {
-
-    }));
+    LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+    recyclerView.setLayoutManager(mLayoutManager);
+    viewModel.getPublicTrails().observe(this, (trails) -> {
+      TrailAdapter trailAdapter = new TrailAdapter(context, trails);
+      recyclerView.setAdapter(trailAdapter);
+    });
 
 
   }

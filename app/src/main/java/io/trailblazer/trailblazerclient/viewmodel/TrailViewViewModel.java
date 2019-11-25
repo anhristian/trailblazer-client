@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.Lifecycle.Event;
 import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,11 +34,12 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
   }
 
 
-  public MutableLiveData<List<Trail>> getPublicTrails() {
+  public LiveData<List<Trail>> getPublicTrails() {
     return publicTrails;
   }
 
-  private void refreshPublicTrails(GoogleSignInAccount account) {
+  public void refreshPublicTrails() {
+    GoogleSignInAccount account = this.account.getValue();
     String token = getAuthorizationHeader(account);
     pending.add(
         NetworkService.getInstance().getAllTrails()

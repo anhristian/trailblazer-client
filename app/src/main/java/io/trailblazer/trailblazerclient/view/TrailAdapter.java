@@ -40,7 +40,7 @@ public class TrailAdapter extends Adapter<Holder> {
 
   @Override
   public int getItemCount() {
-    return 0;
+    return trails.size();
   }
 
   public class Holder extends ViewHolder {
@@ -56,6 +56,7 @@ public class TrailAdapter extends Adapter<Holder> {
 
     private void bind(int position, Trail trail) {
 //      Picasso.get().load(new File(trail.getUrl())).into((ImageView) view.findViewById(R.id.gallery_image));
+      trailName.setText(trail.getName());
 
     }
   }
