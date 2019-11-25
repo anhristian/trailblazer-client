@@ -1,14 +1,19 @@
 package io.trailblazer.trailblazerclient.controller;
 
+import static java.security.AccessController.getContext;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
+import io.trailblazer.trailblazerclient.viewmodel.TrailViewerModel;
 
 public class TrailViewerFragment {
 
@@ -51,4 +56,4 @@ public class TrailViewerFragment {
 
 }
 
-}
+

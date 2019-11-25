@@ -1,6 +1,5 @@
 package io.trailblazer.trailblazerclient.service;
 
-
 import android.app.Application;
 import android.content.Context;
 import android.os.Vibrator;

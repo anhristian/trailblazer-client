@@ -48,6 +48,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+
+    mapView = (MapView) view.findViewById(R.id.mapsFragment);
     mapView = view.findViewById(R.id.map);
     if (mapView != null) {
       mapView.onCreate(null);
@@ -55,8 +57,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
       mapView.getMapAsync(this);
 
     }
-
-
   }
 
   @Override
