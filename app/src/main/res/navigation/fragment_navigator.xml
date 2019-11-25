@@ -3,11 +3,17 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/fragment_navigator"
-  app:startDestination="@id/mapsFragment">
+  app:startDestination="@id/map_nav">
 
   <fragment
-    android:id="@+id/mapsFragment"
+    android:id="@+id/map_nav"
     android:name="io.trailblazer.trailblazerclient.controller.MapsFragment"
     android:label="maps_fragment"
     tools:layout="@layout/maps_fragment"/>
+  <fragment
+    android:id="@+id/trail_viewer_nav"
+    android:label="TrailViewerFragment"
+    android:name="io.trailblazer.trailblazerclient.controller.TrailViewerFragment"
+    tools:layout="@layout/trail_view_fragment"
+    />
 </navigation>

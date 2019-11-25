@@ -40,7 +40,7 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
 
   public void refreshPublicTrails() {
     GoogleSignInAccount account = this.account.getValue();
-    String token = getAuthorizationHeader(account);
+//    String token = getAuthorizationHeader(account);
     pending.add(
         NetworkService.getInstance().getAllTrails()
             .subscribeOn(Schedulers.io())
@@ -48,6 +48,9 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
     );
   }
 
+  public LiveData<Throwable> getThrowable() {
+    return throwable;
+  }
 //  public void populateRecyclerView(){
 //    GoogleSignInAccount account = this.account.getValue();
 //    if (account != null) {
@@ -60,6 +63,10 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
 //    }
 //  }
 
+
+  public void setAccount(GoogleSignInAccount account) {
+    this.account.setValue(account);
+  }
 
   private String getAuthorizationHeader(GoogleSignInAccount account) {
     String token = getApplication().getString(R.string.oauth_header, account.getIdToken());
