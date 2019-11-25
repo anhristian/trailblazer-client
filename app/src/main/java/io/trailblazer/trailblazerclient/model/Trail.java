@@ -11,7 +11,15 @@ public class Trail implements Serializable {
   private long id;
 
   @Expose
-  private String trails;
+  private String name;
+
+  @Expose
+  private String description;
+
+  @Expose
+  private String imageUrl;
+
+
 
   public long getId() {
     return id;
@@ -21,11 +29,27 @@ public class Trail implements Serializable {
     this.id = id;
   }
 
-  public String getTrails() {
-    return trails;
+  public String getName() {
+    return name;
   }
 
-  public void setTrails(String trails) {
-    this.trails = trails;
+  public void setName(String name) {
+    this.name = name;
   }
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+  }
+
 }

@@ -13,11 +13,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface NetworkService {
 
   @GET("trails/public")
   Observable<List<Trail>> getAllTrails();
+
+  @GET("trails/mytrails")
+  Observable<List<Trail>> getMyTrails(@Header("Authorization") String token);
+
+  @GET("trails/search")
+  Observable<List<Trail>> getTrailsByName(@Header("Authorization") String token, @Query("name") String name);
 
   @GET("trails/")
   Observable<List<Trail>> getAllAuthenticated(@Header("Authorization") String token);
@@ -30,6 +37,30 @@ public interface NetworkService {
   }
 
   class InstanceHolder {
+
+
+
+  static NetworkService getInstance() {
+    return InstanceHolder.INSTANCE;
+  }
+
+  class InstanceHolder {
+
+    private static final NetworkService INSTANCE;
+
+    static {
+      Gson gson = new GsonBuilder()
+          .excludeFieldsWithoutExposeAnnotation()
+          .create();
+      Retrofit retrofit = new Retrofit.Builder()
+          .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+          .addConverterFactory(GsonConverterFactory.create(gson))
+          .baseUrl(BuildConfig.BASE_URL)
+          .build();
+      INSTANCE = retrofit.create(NetworkService.class);
+    }
+
+  }
 
     private static final NetworkService INSTANCE;
 
