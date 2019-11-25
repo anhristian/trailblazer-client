@@ -15,17 +15,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import io.trailblazer.trailblazerclient.R;
-import java.util.List;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
-  GoogleMap googleMap;
-  MapView mapView;
-  View view;
+  private GoogleMap googleMap;
+  private MapView mapView;
+  private View view;
 
 
   public MapsFragment() {
@@ -85,7 +83,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             new LatLng(35.16391005961822, -106.46474238050092)));
     googleMap.moveCamera(
         CameraUpdateFactory.newLatLngZoom(new LatLng(35.16430139231649, -106.46370012666549), 17));
-
 
   }
 }

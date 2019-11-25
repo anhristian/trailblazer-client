@@ -1,33 +1,34 @@
 package io.trailblazer.trailblazerclient.controller;
 
-import static java.security.AccessController.getContext;
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.trailblazer.trailblazerclient.R;
-import io.trailblazer.trailblazerclient.model.Trail;
-import io.trailblazer.trailblazerclient.viewmodel.TrailViewerModel;
+import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 
-public class TrailViewerFragment {
+public class TrailViewerFragment extends Fragment {
+
 
   private RecyclerView recyclerView;
   private View view;
-  private TrailViewerModel viewModel;
+  private TrailViewViewModel viewModel;
+
+  public TrailViewerFragment() {
+
+  }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-
-    view = inflater.inflate(R.layout.fragment_gallery, container, false);
-    recyclerView = view.findViewById(R.id.gallery);
-
+    viewModel = ViewModelProviders.of(this).get(TrailViewViewModel.class);
+    view = inflater.inflate(R.layout.trail_view_fragment, container, false);
+    recyclerView = view.findViewById(R.id.trail_view);
     return view;
   }
 
@@ -38,17 +39,21 @@ public class TrailViewerFragment {
 //    float screenWidth = metrics.widthPixels;
 //    float itemWidth = getContext().getResources().getDimension(R.dimen.gallery_item_width);
 
-    int cols = (int) Math.floor(screenWidth / itemWidth);
+//    int cols = (int) Math.floor(screenWidth / itemWidth);
+//
+//    GridLayoutManager manager = new GridLayoutManager(getContext(), cols);
+//
+//    recyclerView.setLayoutManager(manager);
+//    viewModel = ViewModelProviders.of(this).get(GalleryViewModel.class);
+//
+//    viewModel.getImages().observe(this, images -> {
+//      GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), images);
+//      recyclerView.setAdapter(galleryAdapter);
+//    });
 
-    GridLayoutManager manager = new GridLayoutManager(getContext(), cols);
+    viewModel.getPublicTrails().observe(this, (trails -> {
 
-    recyclerView.setLayoutManager(manager);
-    viewModel = ViewModelProviders.of(this).get(GalleryViewModel.class);
-
-    viewModel.getImages().observe(this, images -> {
-      GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), images);
-      recyclerView.setAdapter(galleryAdapter);
-    });
+    }));
 
 
   }
