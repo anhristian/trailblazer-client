@@ -6,23 +6,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
+import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 
-public class TrailViewerFragment {
+public class TrailViewerFragment extends Fragment {
 
   private RecyclerView recyclerView;
   private View view;
-  private TrailViewerModel viewModel;
+  private TrailViewViewModel viewModel;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
     view = inflater.inflate(R.layout.fragment_gallery, container, false);
-    recyclerView = view.findViewById(R.id.gallery);
-
+    recyclerView = view.findViewById(R.id.gallery
+    );
     return view;
   }
 
