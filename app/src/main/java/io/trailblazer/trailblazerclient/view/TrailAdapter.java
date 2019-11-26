@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
+import com.squareup.picasso.Picasso;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
 import io.trailblazer.trailblazerclient.view.TrailAdapter.Holder;
@@ -24,6 +25,13 @@ public class TrailAdapter extends Adapter<Holder> {
       List<Trail> trails) {
     this.context = context;
     this.trails = trails;
+  }
+
+  public void addTrailToView(Trail trail) {
+    if (!trails.contains(trail)) {
+      trails.add(0, trail);
+      notifyItemInserted(0);
+    }
   }
 
   @NonNull
@@ -63,7 +71,7 @@ public class TrailAdapter extends Adapter<Holder> {
 
     private void bind(int position, Trail trail) {
       if (trail.getImageUrl() == null) {
-//        Picasso.get().load(R.mipmap.trail_background).into(background);
+        Picasso.get().load(R.mipmap.trail_background).into(background);
       }
 
       creator.setText(trail.getCreator().getUsername());

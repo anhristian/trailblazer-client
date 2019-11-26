@@ -64,24 +64,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
     MapsInitializer.initialize(context);
-    trailViewViewModel.refreshPublicTrails();
 
-    trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
-      googleMap.clear();
-      for (Trail trail : trails) {
-//        List<LatLng> points = new ArrayList<>();
-        PolylineOptions polyline = new PolylineOptions();
-        for (double[] coordinate : trail.getGeometry().getCoordinates()) {
-//          points.add(new LatLng(coordinate[1],coordinate[0]));
-          polyline.add(new LatLng(coordinate[1], coordinate[0]));
-        }
-        polyline.color(0xffff0000);
-        googleMap.addPolyline(polyline);
-      }
-
-
-    });
-
+    graphAllTrails(googleMap);
 
 //    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 //    googleMap.addMarker(new MarkerOptions().position(new LatLng( 35.085601, -106.649326 )).title("abq"));
@@ -103,6 +87,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //    googleMap.moveCamera(
 //        CameraUpdateFactory.newLatLngZoom(new LatLng(35.16430139231649, -106.46370012666549), 17));
 
+  }
+
+  private void graphAllTrails(GoogleMap googleMap) {
+    trailViewViewModel.refreshPublicTrails();
+    trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
+      googleMap.clear();
+      for (Trail trail : trails) {
+//        List<LatLng> points = new ArrayList<>();
+        PolylineOptions polyline = new PolylineOptions();
+        for (double[] coordinate : trail.getGeometry().getCoordinates()) {
+//          points.add(new LatLng(coordinate[1],coordinate[0]));
+          polyline.add(new LatLng(coordinate[1], coordinate[0]));
+        }
+        polyline.color(0xffff0000);
+        googleMap.addPolyline(polyline);
+      }
+
+
+    });
   }
 
 

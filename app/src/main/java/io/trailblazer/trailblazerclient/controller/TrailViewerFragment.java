@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,11 +59,18 @@ public class TrailViewerFragment extends Fragment {
 //      GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), images);
 //      recyclerView.setAdapter(galleryAdapter);
 //    });
+    LayoutAnimationController animation = AnimationUtils
+        .loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
+    recyclerView.setLayoutAnimation(animation);
+
     LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
     recyclerView.setLayoutManager(mLayoutManager);
     trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
       TrailAdapter trailAdapter = new TrailAdapter(context, trails);
+
       recyclerView.setAdapter(trailAdapter);
+      recyclerView.getAdapter().notifyDataSetChanged();
+      recyclerView.scheduleLayoutAnimation();
     });
 
 
