@@ -47,18 +47,20 @@ public class TrailAdapter extends Adapter<Holder> {
 
     private TextView creator;
     private TextView trailName;
+    private TextView trailGeo;
 
     public Holder(@NonNull View itemView) {
       super(itemView);
       creator = itemView.findViewById(R.id.creator_name);
       trailName = itemView.findViewById(R.id.trail_name);
+      trailGeo = itemView.findViewById(R.id.trail_geo);
     }
 
     private void bind(int position, Trail trail) {
 //      Picasso.get().load(new File(trail.getUrl())).into((ImageView) view.findViewById(R.id.gallery_image));
       creator.setText(trail.getCreator().getUsername());
       trailName.setText(trail.getName());
-
+      trailGeo.setText(trail.getGeometry().toString());
     }
   }
 

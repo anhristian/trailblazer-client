@@ -1,7 +1,6 @@
 package io.trailblazer.trailblazerclient.model;
 
 import com.google.gson.annotations.Expose;
-import com.google.maps.android.data.Geometry;
 import java.io.Serializable;
 
 public class Trail implements Serializable {
@@ -25,6 +24,7 @@ public class Trail implements Serializable {
 
   @Expose
   private Geometry geometry;
+
 
 
   public long getId() {
@@ -65,5 +65,13 @@ public class Trail implements Serializable {
 
   public void setCreator(User creator) {
     this.creator = creator;
+  }
+
+  public Geometry getGeometry() {
+    return geometry;
+  }
+
+  public void setGeometry(Geometry geometry) {
+    this.geometry = geometry;
   }
 }
