@@ -58,7 +58,6 @@ public class TrailAdapter extends Adapter<Holder> {
     private ImageView background;
     private TextView creator;
     private TextView trailName;
-    private TextView trailGeo;
 
     public Holder(@NonNull View itemView) {
       super(itemView);
@@ -73,7 +72,6 @@ public class TrailAdapter extends Adapter<Holder> {
       if (trail.getImageUrl() == null) {
         Picasso.get().load(R.mipmap.trail_background).into(background);
       }
-
       creator.setText(trail.getCreator().getUsername());
       trailName.setText(trail.getName());
 
