@@ -19,6 +19,8 @@ public class Trail implements Serializable {
   @Expose
   private String imageUrl;
 
+  @Expose
+  private User creator;
 
 
   public long getId() {
@@ -36,6 +38,7 @@ public class Trail implements Serializable {
   public void setName(String name) {
     this.name = name;
   }
+
   public String getDescription() {
     return description;
   }
@@ -52,4 +55,11 @@ public class Trail implements Serializable {
     this.imageUrl = imageUrl;
   }
 
+  public User getCreator() {
+    return creator;
+  }
+
+  public void setCreator(User creator) {
+    this.creator = creator;
+  }
 }

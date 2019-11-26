@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     Log.d(TAG, "onCreate: setting up sign-in");
     BottomNavigationView navigation = findViewById(R.id.navigation);
     navigation.setOnNavigationItemSelectedListener(this);
+    navigation.setSelectedItemId(R.id.nav_map_item);
     setupViewModel();
   }
 
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
     switch (item.getItemId()) {
       case R.id.nav_explore_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.trail_viewer_nav);
@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity
       case R.id.nav_map_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.map_nav);
         return true;
-
+      case R.id.nav_profile_item:
+        Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.profile_nav);
+        return true;
     }
     return false;
   }
@@ -97,7 +99,7 @@ public class MainActivity extends AppCompatActivity
         });
   }
 
-  private void refreshSignIn(Runnable runnable) {
+  public void refreshSignIn(Runnable runnable) {
     signInService.refresh()
         .addOnSuccessListener((account) -> runnable.run())
         .addOnFailureListener((e) -> signOut());

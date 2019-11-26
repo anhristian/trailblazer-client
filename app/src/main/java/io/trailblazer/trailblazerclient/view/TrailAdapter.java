@@ -56,7 +56,7 @@ public class TrailAdapter extends Adapter<Holder> {
 
     private void bind(int position, Trail trail) {
 //      Picasso.get().load(new File(trail.getUrl())).into((ImageView) view.findViewById(R.id.gallery_image));
-
+      creator.setText(trail.getCreator().getUsername());
       trailName.setText(trail.getName());
 
     }
