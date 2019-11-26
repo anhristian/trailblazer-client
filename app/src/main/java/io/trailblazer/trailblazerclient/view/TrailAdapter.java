@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
@@ -45,19 +46,26 @@ public class TrailAdapter extends Adapter<Holder> {
 
   public class Holder extends ViewHolder {
 
+    private final View view;
+    private ImageView background;
     private TextView creator;
     private TextView trailName;
     private TextView trailGeo;
 
     public Holder(@NonNull View itemView) {
       super(itemView);
+      background = itemView.findViewById(R.id.trail_image_background);
       creator = itemView.findViewById(R.id.creator_name);
       trailName = itemView.findViewById(R.id.trail_name);
       trailGeo = itemView.findViewById(R.id.trail_geo);
+      view = itemView;
     }
 
     private void bind(int position, Trail trail) {
-//      Picasso.get().load(new File(trail.getUrl())).into((ImageView) view.findViewById(R.id.gallery_image));
+      if (trail.getImageUrl() == null) {
+//        Picasso.get().load(R.mipmap.trail_background).into(background);
+      }
+
       creator.setText(trail.getCreator().getUsername());
       trailName.setText(trail.getName());
       trailGeo.setText(trail.getGeometry().toString());

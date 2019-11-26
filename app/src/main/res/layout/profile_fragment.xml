@@ -10,7 +10,7 @@
     android:layout_height="match_parent"
     android:elevation="-1dp"
     android:scaleType="centerCrop"
-    android:src="@drawable/profile_background"
+    android:src="@mipmap/profile_background"
     />
 
 

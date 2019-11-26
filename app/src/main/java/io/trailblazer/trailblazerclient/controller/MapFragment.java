@@ -8,18 +8,24 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 import io.trailblazer.trailblazerclient.R;
+import io.trailblazer.trailblazerclient.model.Trail;
+import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
   private GoogleMap googleMap;
   private MapView mapView;
   private View view;
   private Context context;
+  private TrailViewViewModel trailViewViewModel;
 
 
   @Override
@@ -33,6 +39,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
       @Nullable Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.maps_fragment, container, false);
     context = container.getContext();
+    trailViewViewModel = ViewModelProviders.of(this)
+        .get(TrailViewViewModel.class);
+
     return view;
   }
 
@@ -52,7 +61,27 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
   @Override
   public void onMapReady(GoogleMap googleMap) {
 
+    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
     MapsInitializer.initialize(context);
+    trailViewViewModel.refreshPublicTrails();
+
+    trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
+      googleMap.clear();
+      for (Trail trail : trails) {
+//        List<LatLng> points = new ArrayList<>();
+        PolylineOptions polyline = new PolylineOptions();
+        for (double[] coordinate : trail.getGeometry().getCoordinates()) {
+//          points.add(new LatLng(coordinate[1],coordinate[0]));
+          polyline.add(new LatLng(coordinate[1], coordinate[0]));
+        }
+        polyline.color(0xffff0000);
+        googleMap.addPolyline(polyline);
+      }
+
+
+    });
+
 
 //    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 //    googleMap.addMarker(new MarkerOptions().position(new LatLng( 35.085601, -106.649326 )).title("abq"));
