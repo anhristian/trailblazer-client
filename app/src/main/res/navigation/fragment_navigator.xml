@@ -7,7 +7,7 @@
 
   <fragment
     android:id="@+id/map_nav"
-    android:name="io.trailblazer.trailblazerclient.controller.MapsFragment"
+    android:name="io.trailblazer.trailblazerclient.controller.MapFragment"
     android:label="maps_fragment"
     tools:layout="@layout/maps_fragment"/>
   <fragment
@@ -16,4 +16,9 @@
     android:name="io.trailblazer.trailblazerclient.controller.TrailViewerFragment"
     tools:layout="@layout/trail_view_fragment"
     />
+  <fragment
+    android:id="@+id/profile_nav"
+    android:label="profile_fragment"
+    android:name="io.trailblazer.trailblazerclient.controller.ProfileFragment"
+    tools:layout="@layout/profile_fragment"/>
 </navigation>

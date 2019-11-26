@@ -3,18 +3,13 @@ package io.trailblazer.trailblazerclient.service;
 import android.app.Application;
 import android.content.Context;
 import android.os.Vibrator;
-import io.reactivex.Observable;
-import io.trailblazer.trailblazerclient.model.Trail;
-import java.util.List;
-import retrofit2.http.GET;
-import retrofit2.http.Header;
 
-public class MapsService {
+public class MapService {
 
   private static Application applicationContext;
   private static Vibrator vibrator;
 
-  private MapsService() {
+  private MapService() {
     vibrator = (Vibrator) applicationContext.getSystemService(Context.VIBRATOR_SERVICE);
   }
 
@@ -24,11 +19,11 @@ public class MapsService {
    * @param applicationContext {@link android.content.Context} used for signing in.
    */
   public static void setApplicationContext(Application applicationContext) {
-    MapsService.applicationContext = applicationContext;
+    MapService.applicationContext = applicationContext;
   }
 
-  public static MapsService getInstance() {
-    return MapsService.InstanceHolder.INSTANCE;
+  public static MapService getInstance() {
+    return MapService.InstanceHolder.INSTANCE;
   }
 
 
@@ -37,7 +32,7 @@ public class MapsService {
 
   private static class InstanceHolder {
 
-    private static final MapsService INSTANCE = new MapsService();
+    private static final MapService INSTANCE = new MapService();
   }
 
 }

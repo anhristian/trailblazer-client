@@ -9,4 +9,9 @@
   <string name="oauth_header">Bearer %s</string>
   <string name="explore">Explore</string>
   <string name="map">Map</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+  <string name="profile">Profile</string>
+  <string name="default_image">default image</string>
 </resources>

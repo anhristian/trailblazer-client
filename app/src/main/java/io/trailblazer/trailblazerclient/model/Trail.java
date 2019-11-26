@@ -19,6 +19,12 @@ public class Trail implements Serializable {
   @Expose
   private String imageUrl;
 
+  @Expose
+  private User creator;
+
+  @Expose
+  private Geometry geometry;
+
 
 
   public long getId() {
@@ -36,6 +42,7 @@ public class Trail implements Serializable {
   public void setName(String name) {
     this.name = name;
   }
+
   public String getDescription() {
     return description;
   }
@@ -52,4 +59,19 @@ public class Trail implements Serializable {
     this.imageUrl = imageUrl;
   }
 
+  public User getCreator() {
+    return creator;
+  }
+
+  public void setCreator(User creator) {
+    this.creator = creator;
+  }
+
+  public Geometry getGeometry() {
+    return geometry;
+  }
+
+  public void setGeometry(Geometry geometry) {
+    this.geometry = geometry;
+  }
 }

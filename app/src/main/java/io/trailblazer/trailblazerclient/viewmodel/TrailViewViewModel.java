@@ -48,6 +48,8 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
     );
   }
 
+
+
   public LiveData<Throwable> getThrowable() {
     return throwable;
   }
