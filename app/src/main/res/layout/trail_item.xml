@@ -4,6 +4,9 @@
   android:layout_width="match_parent"
   android:layout_height="100dp"
   android:orientation="vertical"
+  android:paddingTop="3dp"
+  android:paddingBottom="3dp"
+  android:background="@android:color/background_dark"
   >
   <ImageView
     android:id="@+id/trail_image"
@@ -12,6 +15,8 @@
     android:elevation="0dp"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
+    android:scaleType="centerCrop"
+    android:src="@drawable/trail_background"
     />
 
   <TextView
@@ -28,14 +33,17 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:elevation="10dp"
-    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintBottom_toBottomOf="@id/trail_geo"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="@id/trail_name"
     />
   <TextView
     android:id="@+id/trail_geo"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/trail_name"
     android:elevation="10dp"
     />
 
