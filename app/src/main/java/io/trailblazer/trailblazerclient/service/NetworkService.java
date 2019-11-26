@@ -2,6 +2,7 @@ package io.trailblazer.trailblazerclient.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.maps.android.data.Geometry;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.trailblazer.trailblazerclient.BuildConfig;
@@ -36,6 +37,11 @@ public interface NetworkService {
 
   @GET("trails/{id}")
   Single<Trail> getTrailById(@Header("Authorization") String token, @Path("id") long id);
+
+  @GET("{id}/geometry")
+  Observable<Geometry> getGeometry(@Header("Authorization") String token, @Path("id") long id);
+
+
 
   class InstanceHolder {
 
