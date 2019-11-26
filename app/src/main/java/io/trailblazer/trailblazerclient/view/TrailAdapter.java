@@ -65,7 +65,7 @@ public class TrailAdapter extends Adapter<Holder> {
       background = itemView.findViewById(R.id.trail_image_background);
       creator = itemView.findViewById(R.id.creator_name);
       trailName = itemView.findViewById(R.id.trail_name);
-      trailGeo = itemView.findViewById(R.id.trail_geo);
+
       view = itemView;
     }
 
@@ -76,7 +76,7 @@ public class TrailAdapter extends Adapter<Holder> {
 
       creator.setText(trail.getCreator().getUsername());
       trailName.setText(trail.getName());
-      trailGeo.setText(trail.getGeometry().toString());
+
     }
   }
 

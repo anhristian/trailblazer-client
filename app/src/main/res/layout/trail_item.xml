@@ -25,7 +25,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="#FFFFFF"
-    app:layout_constraintTop_toTopOf="parent"
+    android:shadowColor="#000000"
+    android:shadowRadius="10"
+    android:elevation="10dp"
+    android:textSize="30sp"
+    app:layout_constraintBottom_toTopOf="@id/creator_name"
     app:layout_constraintStart_toStartOf="parent"
     />
 
@@ -33,20 +37,11 @@
     android:id="@+id/creator_name"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toBottomOf="@id/trail_name"
-    android:textColor="#FFFFFF"
-    app:layout_constraintStart_toStartOf="parent"
-
-    />
-
-  <TextView
-    android:id="@+id/trail_geo"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/creator_name"
     android:textColor="#FFFFFF"
+    app:layout_constraintStart_toStartOf="parent"
+    android:elevation="10dp"
     />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
