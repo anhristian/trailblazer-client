@@ -7,12 +7,16 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.trailblazer.trailblazerclient.BuildConfig;
 import io.trailblazer.trailblazerclient.model.Trail;
+import io.trailblazer.trailblazerclient.model.User;
 import java.util.List;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -40,6 +44,15 @@ public interface NetworkService {
 
   @GET("{id}/geometry")
   Observable<Geometry> getGeometry(@Header("Authorization") String token, @Path("id") long id);
+
+  @GET("user")
+  Single<User> getUser(@Header("Authorization") String token);
+
+  @PUT("user")
+  Single<User> updateUser(@Header("Authorization") String token);
+
+  @POST("trails")
+  Single<Trail> postTrail(@Header("Authorization") String token, @Body Trail trail);
 
 
 
