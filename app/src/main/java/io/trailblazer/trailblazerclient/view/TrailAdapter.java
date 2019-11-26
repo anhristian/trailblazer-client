@@ -45,8 +45,8 @@ public class TrailAdapter extends Adapter<Holder> {
 
   public class Holder extends ViewHolder {
 
-    TextView creator;
-    TextView trailName;
+    private TextView creator;
+    private TextView trailName;
 
     public Holder(@NonNull View itemView) {
       super(itemView);
@@ -56,6 +56,7 @@ public class TrailAdapter extends Adapter<Holder> {
 
     private void bind(int position, Trail trail) {
 //      Picasso.get().load(new File(trail.getUrl())).into((ImageView) view.findViewById(R.id.gallery_image));
+
       trailName.setText(trail.getName());
 
     }

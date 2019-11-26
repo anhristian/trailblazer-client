@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "BASE_URL", '"http://libsoft.io/rest/trailblazer/"'
+        buildConfigField "String", "BASE_URL", '"http://libsoft.io"'
         buildConfigField "String", "CLIENT_ID", '"748743978528-07j285fph8qmesfkmlnivuvq11tc5il7.apps.googleusercontent.com"'
     }
     buildTypes {
