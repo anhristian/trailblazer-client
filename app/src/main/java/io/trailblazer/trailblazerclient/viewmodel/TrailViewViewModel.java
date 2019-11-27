@@ -14,6 +14,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
+import io.trailblazer.trailblazerclient.service.GoogleSignInService;
 import io.trailblazer.trailblazerclient.service.NetworkService;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
   private final CompositeDisposable pending;
   private final MutableLiveData<GoogleSignInAccount> account;
   private final MutableLiveData<List<Trail>> publicTrails;
+  private final MutableLiveData<Trail> singleTrail;
+
 
   public TrailViewViewModel(@NonNull Application application) {
     super(application);
@@ -30,7 +33,7 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
     pending = new CompositeDisposable();
     publicTrails = new MutableLiveData<>();
     account = new MutableLiveData<>();
-
+    singleTrail = new MutableLiveData<>();
   }
 
 
@@ -38,9 +41,15 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
     return publicTrails;
   }
 
+  public void getTrail(Trail trail) {
+    pending.add(
+        NetworkService.getInstance().getTrailById(getAuthorizationHeader(), trail.getId())
+            .subscribeOn(Schedulers.io())
+            .subscribe(this.singleTrail::postValue, this.throwable::postValue)
+    );
+  }
+
   public void refreshPublicTrails() {
-    GoogleSignInAccount account = this.account.getValue();
-//    String token = getAuthorizationHeader(account);
     pending.add(
         NetworkService.getInstance().getAllTrails()
             .subscribeOn(Schedulers.io())
@@ -49,30 +58,20 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
   }
 
 
-
   public LiveData<Throwable> getThrowable() {
     return throwable;
   }
-//  public void populateRecyclerView(){
-//    GoogleSignInAccount account = this.account.getValue();
-//    if (account != null) {
-//      String token = getAuthorizationHeader(account);
-//      pending.add(
-//          NetworkService.getInstance().getAllAuthenticated(token)
-//              .subscribeOn(Schedulers.io())
-//              .subscribe((p) account), this.throwable::postValue)
-//);
-//    }
-//  }
-
 
   public void setAccount(GoogleSignInAccount account) {
     this.account.setValue(account);
   }
 
-  private String getAuthorizationHeader(GoogleSignInAccount account) {
-    String token = getApplication().getString(R.string.oauth_header, account.getIdToken());
-    Log.d("OAuth2.0 token", token); // FIXME Remove before shipping.
+  private String getAuthorizationHeader() {
+    // FIXME finish adding token to viewmodel instead of querying signinservice
+    String token = getApplication()
+        .getString(R.string.oauth_header,
+            GoogleSignInService.getInstance().getAccount().getValue().getIdToken());
+    Log.d("OAuth2.0 token", token);
     return token;
   }
 
@@ -83,4 +82,7 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
   }
 
 
+  public LiveData<Trail> getSingleTrail() {
+    return singleTrail;
+  }
 }

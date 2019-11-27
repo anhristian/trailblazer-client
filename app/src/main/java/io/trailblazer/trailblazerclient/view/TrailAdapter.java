@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
 import io.trailblazer.trailblazerclient.view.TrailAdapter.Holder;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrailAdapter extends Adapter<Holder> {
@@ -20,18 +21,14 @@ public class TrailAdapter extends Adapter<Holder> {
 
   private final Context context;
   private final List<Trail> trails;
+  private final OnClickListener clickListener;
 
   public TrailAdapter(Context context,
-      List<Trail> trails) {
+      OnClickListener clickListener) {
     this.context = context;
-    this.trails = trails;
-  }
+    this.clickListener = clickListener;
+    this.trails = new ArrayList<>();
 
-  public void addTrailToView(Trail trail) {
-    if (!trails.contains(trail)) {
-      trails.add(0, trail);
-      notifyItemInserted(0);
-    }
   }
 
   @NonNull
@@ -52,6 +49,17 @@ public class TrailAdapter extends Adapter<Holder> {
     return trails.size();
   }
 
+  public void setTrails(List<Trail> trails) {
+    this.trails.clear();
+    this.trails.addAll(trails);
+  }
+
+  @FunctionalInterface
+  public interface OnClickListener {
+
+    void onClick(View view, int position, Trail trail);
+  }
+
   public class Holder extends ViewHolder {
 
     private final View view;
@@ -64,7 +72,6 @@ public class TrailAdapter extends Adapter<Holder> {
       background = itemView.findViewById(R.id.trail_image_background);
       creator = itemView.findViewById(R.id.creator_name);
       trailName = itemView.findViewById(R.id.trail_name);
-
       view = itemView;
     }
 
@@ -75,6 +82,9 @@ public class TrailAdapter extends Adapter<Holder> {
       creator.setText(trail.getCreator().getUsername());
       trailName.setText(trail.getName());
 
+      view.setOnClickListener((view) -> {
+        clickListener.onClick(view, position, trail);
+      });
     }
   }
 

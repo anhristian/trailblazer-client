@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
@@ -18,6 +20,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -26,11 +30,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   private View view;
   private Context context;
   private TrailViewViewModel trailViewViewModel;
-
+  private Trail trail;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    if (getArguments() != null && getArguments().containsKey("trail")) {
+      trail = ((Trail) getArguments().getSerializable("trail"));
+    }
   }
 
 
@@ -54,7 +61,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
       mapView.onCreate(null);
       mapView.onResume();
       mapView.getMapAsync(this);
-
     }
   }
 
@@ -62,10 +68,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   public void onMapReady(GoogleMap googleMap) {
 
     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
     MapsInitializer.initialize(context);
 
-    graphAllTrails(googleMap);
+    if (trail != null) {
+      graph(trail, googleMap);
+    }
 
 //    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 //    googleMap.addMarker(new MarkerOptions().position(new LatLng( 35.085601, -106.649326 )).title("abq"));
@@ -87,6 +94,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //    googleMap.moveCamera(
 //        CameraUpdateFactory.newLatLngZoom(new LatLng(35.16430139231649, -106.46370012666549), 17));
 
+  }
+
+  private void graph(Trail trail, GoogleMap googleMap) {
+    googleMap.clear();
+    PolylineOptions polyline = new PolylineOptions();
+    List<LatLng> points = new ArrayList<>();
+    for (double[] coordinate : trail.getGeometry().getCoordinates()) {
+      LatLng latLng = new LatLng(coordinate[1], coordinate[0]);
+      points.add(latLng);
+      polyline.add(latLng);
+    }
+    polyline.color(0xffff0000);
+    googleMap.addPolyline(polyline);
+    CameraUpdate loc = CameraUpdateFactory.newLatLngZoom(points.get(0), 16);
+    googleMap.animateCamera(loc);
   }
 
   private void graphAllTrails(GoogleMap googleMap) {

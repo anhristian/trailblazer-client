@@ -1,5 +1,6 @@
 package io.trailblazer.trailblazerclient.controller;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.trailblazer.trailblazerclient.R;
-import io.trailblazer.trailblazerclient.model.Trail;
+import io.trailblazer.trailblazerclient.view.TrailAdapter;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 
 public class TrailViewerFragment extends Fragment {
@@ -42,31 +44,24 @@ public class TrailViewerFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-//    DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-//    float screenWidth = metrics.widthPixels;
-//    float itemWidth = getContext().getResources().getDimension(R.dimen.gallery_item_width);
-
-//    int cols = (int) Math.floor(screenWidth / itemWidth);
-//
-//    GridLayoutManager manager = new GridLayoutManager(getContext(), cols);
-//
-//    recyclerView.setLayoutManager(manager);
-//    viewModel = ViewModelProviders.of(this).get(GalleryViewModel.class);
-//
-//    viewModel.getImages().observe(this, images -> {
-//      GalleryAdapter galleryAdapter = new GalleryAdapter(getContext(), images);
-//      recyclerView.setAdapter(galleryAdapter);
-//    });
     LayoutAnimationController animation = AnimationUtils
         .loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
     recyclerView.setLayoutAnimation(animation);
 
     LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
     recyclerView.setLayoutManager(mLayoutManager);
-    trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
-      TrailAdapter trailAdapter = new TrailAdapter(context, trails);
+    TrailAdapter trailAdapter = new TrailAdapter(context, (v, position, trail) -> {
+      trailViewViewModel.getTrail(trail);
+      trailViewViewModel.getSingleTrail().observe(this, (t) -> {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("trail", trail);
+        Navigation.findNavController(view).navigate(R.id.map_nav, bundle);
+      });
+    });
+    recyclerView.setAdapter(trailAdapter);
 
-      recyclerView.setAdapter(trailAdapter);
+    trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
+      trailAdapter.setTrails(trails);
       recyclerView.getAdapter().notifyDataSetChanged();
       recyclerView.scheduleLayoutAnimation();
     });

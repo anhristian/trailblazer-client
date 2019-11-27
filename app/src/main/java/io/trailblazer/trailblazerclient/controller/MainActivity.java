@@ -12,14 +12,12 @@ import androidx.navigation.Navigation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.service.GoogleSignInService;
-import io.trailblazer.trailblazerclient.viewmodel.MainViewModel;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 
 public class MainActivity extends AppCompatActivity
     implements BottomNavigationView.OnNavigationItemSelectedListener {
 
   private static final String TAG = "main_activity";
-  private MainViewModel viewModel;
   private GoogleSignInService signInService;
   private TrailViewViewModel trailViewViewModel;
 
@@ -27,19 +25,26 @@ public class MainActivity extends AppCompatActivity
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    setupViewModel();
     setupSignIn();
     Log.d(TAG, "onCreate: setting up sign-in");
     BottomNavigationView navigation = findViewById(R.id.navigation);
     navigation.setOnNavigationItemSelectedListener(this);
     navigation.setSelectedItemId(R.id.nav_map_item);
-    setupViewModel();
   }
 
   private void setupViewModel() {
     trailViewViewModel = ViewModelProviders.of(this).get(TrailViewViewModel.class);
-    viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+    getLifecycle().addObserver(trailViewViewModel);
   }
 
+  private void setupSignIn() {
+    signInService = GoogleSignInService.getInstance();
+    signInService.getAccount().observe(this, (account) -> {
+          trailViewViewModel.setAccount(account);
+        }
+    );
+  }
 
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -78,17 +83,7 @@ public class MainActivity extends AppCompatActivity
     return handled;
   }
 
-  private void setupSignIn() {
-    signInService = GoogleSignInService.getInstance();
 
-    signInService.getAccount().observe(this, (account) -> {
-          trailViewViewModel.setAccount(account);
-          viewModel.setAccount(account);
-          viewModel.printOauth();
-        }
-
-    );
-  }
 
   private void signOut() {
     signInService.signOut()

@@ -1,7 +1,6 @@
 package io.trailblazer.trailblazerclient.model;
 
 import com.google.gson.annotations.Expose;
-import java.util.Arrays;
 
 public class Geometry {
 
@@ -27,12 +26,4 @@ public class Geometry {
     this.coordinates = coordinates;
   }
 
-
-  @Override
-  public String toString() {
-    return "Geometry{" +
-        "type='" + type + '\'' +
-        ", coordinates=" + Arrays.toString(coordinates[1]) +
-        '}';
-  }
 }
