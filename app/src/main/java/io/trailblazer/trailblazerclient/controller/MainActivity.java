@@ -1,5 +1,6 @@
 package io.trailblazer.trailblazerclient.controller;
 
+import android.Manifest.permission;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -18,6 +20,7 @@ public class MainActivity extends AppCompatActivity
     implements BottomNavigationView.OnNavigationItemSelectedListener {
 
   private static final String TAG = "main_activity";
+  private static final int PERMISSIONS_REQUEST_CODE = 1000;
   private GoogleSignInService signInService;
   private TrailViewViewModel trailViewViewModel;
 
@@ -31,6 +34,12 @@ public class MainActivity extends AppCompatActivity
     BottomNavigationView navigation = findViewById(R.id.navigation);
     navigation.setOnNavigationItemSelectedListener(this);
     navigation.setSelectedItemId(R.id.nav_map_item);
+
+    ActivityCompat.requestPermissions(this,
+        new String[]{
+            permission.ACCESS_FINE_LOCATION,
+        }, PERMISSIONS_REQUEST_CODE);
+
   }
 
   private void setupViewModel() {

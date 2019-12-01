@@ -5,12 +5,12 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "io.trailblazer.trailblazerclient"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField "String", "BASE_URL", '"http://libsoft.io"'
+        buildConfigField "String", "BASE_URL", '"https://libsoft.io"'
         buildConfigField "String", "CLIENT_ID", '"748743978528-07j285fph8qmesfkmlnivuvq11tc5il7.apps.googleusercontent.com"'
     }
     buildTypes {
