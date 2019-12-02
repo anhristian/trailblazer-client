@@ -12,14 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import io.trailblazer.trailblazerclient.R;
-import io.trailblazer.trailblazerclient.model.Trail;
-import io.trailblazer.trailblazerclient.view.TrailAdapter;
 import io.trailblazer.trailblazerclient.view.TrailAdapter;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 
@@ -63,14 +59,17 @@ public class TrailViewerFragment extends Fragment {
       });
     });
     recyclerView.setAdapter(trailAdapter);
+    getAllTrails(trailAdapter);
 
+
+  }
+
+  private void getAllTrails(TrailAdapter trailAdapter) {
     trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
       trailAdapter.setTrails(trails);
       recyclerView.getAdapter().notifyDataSetChanged();
       recyclerView.scheduleLayoutAnimation();
     });
-
-
   }
 
 

@@ -9,7 +9,10 @@
     android:id="@+id/map_nav"
     android:name="io.trailblazer.trailblazerclient.controller.MapFragment"
     android:label="maps_fragment"
-    tools:layout="@layout/maps_fragment"/>
+
+    tools:layout="@layout/maps_fragment">
+
+  </fragment>
   <fragment
     android:id="@+id/trail_viewer_nav"
     android:label="TrailViewerFragment"

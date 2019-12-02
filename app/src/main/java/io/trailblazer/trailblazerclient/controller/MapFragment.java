@@ -2,6 +2,7 @@ package io.trailblazer.trailblazerclient.controller;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
@@ -27,6 +29,7 @@ import java.util.List;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+  private static final String TAG = "mapfragment";
   private GoogleMap googleMap;
   private MapView mapView;
   private View view;
@@ -46,9 +49,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
       @Nullable Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.maps_fragment, container, false);
     context = container.getContext();
+    setRetainInstance(true);
     trailViewViewModel = ViewModelProviders.of(this)
         .get(TrailViewViewModel.class);
-
+    Log.d(TAG, "onCreateView: ");
     return view;
   }
 
@@ -66,26 +70,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
   @Override
   public void onMapReady(GoogleMap googleMap) {
-    googleMap.setMyLocationEnabled(true);
-    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
     MapsInitializer.initialize(context);
+
+    googleMap.setMyLocationEnabled(true);
+    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
     LocationService.getInstance().setCurrentLocation();
     LocationService.getInstance().getCurrentLocation().observe(this, (location) -> {
       CameraPosition here = CameraPosition.builder()
           .target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16).bearing(0)
           .build();
       googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(here));
-      if (getArguments() != null && getArguments().containsKey("trail")) {
-        trail = ((Trail) getArguments().getSerializable("trail"));
-      }
 
-      if (trail != null) {
-        graph(here, trail, googleMap);
-      }
+      googleMap.setOnMapLoadedCallback(() -> {
+
+        if (getArguments() != null && getArguments().containsKey("trail")) {
+          trail = ((Trail) getArguments().getSerializable("trail"));
+        }
+
+        if (trail != null) {
+          graph(trail, googleMap);
+        }
+      });
     });
-
-//    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//    googleMap.addMarker(new MarkerOptions().position(new LatLng( 35.085601, -106.649326 )).title("abq"));
 //
 //    CameraPosition abq = CameraPosition.builder().target(new LatLng( 35.085601, -106.649326 )).zoom(16)
 //        .bearing(0).tilt(45).build();
@@ -106,8 +112,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
   }
 
-  private void graph(CameraPosition cameraPosition, Trail trail, GoogleMap googleMap) {
+  private void graph(Trail trail, GoogleMap googleMap) {
     googleMap.clear();
+    googleMap.addMarker(
+        new MarkerOptions().position(new LatLng(trail.getGeometry().getCoordinates()[0][1],
+            trail.getGeometry().getCoordinates()[0][0])).title(trail.getName()));
     PolylineOptions polyline = new PolylineOptions();
     List<LatLng> points = new ArrayList<>();
     for (double[] coordinate : trail.getGeometry().getCoordinates()) {
@@ -119,7 +128,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     googleMap.addPolyline(polyline);
     CameraUpdate loc = CameraUpdateFactory.newLatLngZoom(points.get(0), 16);
 
-    googleMap.animateCamera(loc, 10000, null);
+    googleMap.animateCamera(loc, 6000, null);
+
   }
 
 
