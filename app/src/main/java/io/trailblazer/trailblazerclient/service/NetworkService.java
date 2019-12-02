@@ -48,6 +48,9 @@ public interface NetworkService {
   @GET("user")
   Single<User> getUser(@Header("Authorization") String token);
 
+  @GET("user/stats")
+  Single<User> getUserStats(@Header("Authorization") String token);
+
   @PUT("user")
   Single<User> updateUser(@Header("Authorization") String token);
 

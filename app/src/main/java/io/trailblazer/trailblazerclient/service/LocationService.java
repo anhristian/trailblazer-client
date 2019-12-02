@@ -47,7 +47,9 @@ public class LocationService implements LocationListener {
         != PackageManager.PERMISSION_GRANTED) {
       return;
     }
-    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 0, this);
+//
+//    LocationServices.getFusedLocationProviderClient(applicationContext)
+//        .requestLocationUpdates().addOnSuccessListener()
 
   }
 

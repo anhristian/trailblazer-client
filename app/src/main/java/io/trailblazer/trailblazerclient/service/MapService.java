@@ -13,11 +13,6 @@ public class MapService {
     vibrator = (Vibrator) applicationContext.getSystemService(Context.VIBRATOR_SERVICE);
   }
 
-  /**
-   * Sets the context required by any services used by this service.
-   *
-   * @param applicationContext {@link android.content.Context} used for signing in.
-   */
   public static void setApplicationContext(Application applicationContext) {
     MapService.applicationContext = applicationContext;
   }
