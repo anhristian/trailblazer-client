@@ -16,4 +16,5 @@
   <string name="default_image">default image</string>
   <string name="profile_background">Profile background</string>
   <string name="header_cover_image">header cover image</string>
+  <string name="profile_edit">profile edit</string>
 </resources>

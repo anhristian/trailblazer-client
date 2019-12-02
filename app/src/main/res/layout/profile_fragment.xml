@@ -58,27 +58,25 @@
         android:layout_marginTop="16dp"
         android:clickable="true"
         android:src="@android:drawable/ic_menu_edit"
-        android:focusable="true"/>
-
+        android:focusable="true"
+        android:contentDescription="@string/profile_edit"/>
     </RelativeLayout>
-
-    <android.support.constraint.ConstraintLayout
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/profile_layout"
+      android:layout_below="@id/profile_layout"
+      android:elevation="4dp"
       android:layout_margin="5dp"
       android:layout_marginTop="5dp"
-      android:background="#fff"
-      android:elevation="4dp"
-      android:orientation="vertical"
       android:paddingTop="20dp"
       android:paddingBottom="20dp"
       android:paddingRight="5dp"
-      android:paddingLeft="5dp"
-      >
+      android:paddingLeft="5dp">
 
 
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
   </RelativeLayout>
 </ScrollView>
