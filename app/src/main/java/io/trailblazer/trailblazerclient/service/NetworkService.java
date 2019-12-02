@@ -46,10 +46,10 @@ public interface NetworkService {
   @GET("{id}/geometry")
   Observable<Geometry> getGeometry(@Header("Authorization") String token, @Path("id") long id);
 
-  @GET("user/stats")
+  @GET("user/")
   Single<User> getUser(@Header("Authorization") String token);
 
-  @PUT("user/stats")
+  @PUT("user/")
   Single<User> updateUser(@Header("Authorization") String token,
       @Body UserCharacteristics userCharacteristics);
 
