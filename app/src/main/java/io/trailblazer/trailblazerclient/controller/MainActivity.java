@@ -15,6 +15,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.service.GoogleSignInService;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
+import io.trailblazer.trailblazerclient.viewmodel.UserViewModel;
 
 public class MainActivity extends AppCompatActivity
     implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity
   private static final int PERMISSIONS_REQUEST_CODE = 1000;
   private GoogleSignInService signInService;
   private TrailViewViewModel trailViewViewModel;
+  private UserViewModel userViewModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +46,17 @@ public class MainActivity extends AppCompatActivity
 
   private void setupViewModel() {
     trailViewViewModel = ViewModelProviders.of(this).get(TrailViewViewModel.class);
+    userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
     getLifecycle().addObserver(trailViewViewModel);
+    getLifecycle().addObserver(userViewModel);
+
   }
 
   private void setupSignIn() {
     signInService = GoogleSignInService.getInstance();
     signInService.getAccount().observe(this, (account) -> {
           trailViewViewModel.setAccount(account);
+      userViewModel.setUser();
         }
     );
   }
@@ -93,12 +99,11 @@ public class MainActivity extends AppCompatActivity
   }
 
 
-
   private void signOut() {
     signInService.signOut()
         .addOnCompleteListener((task) -> {
           Intent intent = new Intent(this, LoginActivity.class);
-          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK |Intent.FLAG_ACTIVITY_NEW_TASK);
+          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
           startActivity(intent);
         });
   }
