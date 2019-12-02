@@ -13,7 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import io.trailblazer.trailblazerclient.R;
-import io.trailblazer.trailblazerclient.model.User;
+import io.trailblazer.trailblazerclient.model.UserCharacteristics;
 import io.trailblazer.trailblazerclient.service.GoogleSignInService;
 import io.trailblazer.trailblazerclient.service.NetworkService;
 
@@ -22,7 +22,7 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
   private final MutableLiveData<GoogleSignInAccount> account;
-  private final MutableLiveData<User> singleUser;
+  private final MutableLiveData<UserCharacteristics> user;
 
 
   public UserViewModel(@NonNull Application application) {
@@ -30,33 +30,25 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     account = new MutableLiveData<>();
-    singleUser = new MutableLiveData<>();
+    user = new MutableLiveData<>();
   }
 
   public void setUser() {
     pending.add(
         NetworkService.getInstance().getUser(getAuthorizationHeader())
         .subscribeOn(Schedulers.io())
-        .subscribe(this.singleUser::postValue, this.throwable::postValue)
+            .subscribe(this.user::postValue, this.throwable::postValue)
     );
   }
 
-  public void setAccount(GoogleSignInAccount account) {
-    this.account.setValue(account);
+  public LiveData<UserCharacteristics> getUser() {
+    return user;
   }
-
 
   public MutableLiveData<Throwable> getThrowable() {
     return throwable;
   }
 
-  public MutableLiveData<GoogleSignInAccount> getAccount() {
-    return account;
-  }
-
-  public LiveData<User> getSingleUser() {
-    return singleUser;
-  }
 
   private String getAuthorizationHeader() {
     // FIXME finish adding token to viewmodel instead of querying signinservice

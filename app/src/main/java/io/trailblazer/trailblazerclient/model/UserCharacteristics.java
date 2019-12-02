@@ -30,6 +30,8 @@ public class UserCharacteristics implements Serializable {
   @Expose
   private String lastName;
 
+  @Expose
+  private Integer age;
 
   public User getUser() {
     return user;
@@ -79,4 +81,13 @@ public class UserCharacteristics implements Serializable {
   public void setLastName(String lastName) {
     this.lastName = lastName;
   }
+
+  public Integer getAge() {
+    return age;
+  }
+
+  public void setAge(Integer age) {
+    this.age = age;
+  }
+
 }
