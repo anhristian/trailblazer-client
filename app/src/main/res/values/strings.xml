@@ -17,4 +17,8 @@
   <string name="profile_background">Profile background</string>
   <string name="header_cover_image">header cover image</string>
   <string name="profile_edit">profile edit</string>
+  <string name="name">Name</string>
+  <string name="age">Age</string>
+  <string name="weight">Weight</string>
+  <string name="height">Height (inches)</string>
 </resources>

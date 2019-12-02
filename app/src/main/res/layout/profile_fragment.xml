@@ -74,6 +74,42 @@
       android:paddingRight="5dp"
       android:paddingLeft="5dp">
 
+      <EditText
+        android:id="@+id/edit_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="textPersonName"
+        android:hint="@string/name"/>
+
+      <EditText
+        android:id="@+id/edit_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/edit_name"
+        app:layout_constraintStart_toStartOf="parent"
+        android:inputType="number"
+        android:hint="@string/age"/>
+
+      <EditText
+        android:id="@+id/edit_weight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/edit_age"
+        app:layout_constraintTop_toBottomOf="@id/edit_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:inputType="number"
+        android:hint="@string/weight"/>
+
+      <EditText
+        android:id="@+id/edit_height"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        app:layout_constraintTop_toBottomOf="@id/edit_age"
+        android:hint="@string/height"/>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
