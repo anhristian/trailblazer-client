@@ -53,6 +53,10 @@ public interface NetworkService {
   Single<User> updateUser(@Header("Authorization") String token,
       @Body UserCharacteristics userCharacteristics);
 
+  @PUT("user/username")
+  Single<User> updateUsername(@Header("Authorization") String token,
+      @Body UserCharacteristics userCharacteristics);
+
   @POST("trails")
   Single<Trail> postTrail(@Header("Authorization") String token, @Body Trail trail);
 

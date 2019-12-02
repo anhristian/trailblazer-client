@@ -47,6 +47,18 @@
       android:elevation="4dp"
       android:paddingBottom="24dp">
 
+      <EditText
+        android:id="@+id/edit_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:hint="@string/username"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:textStyle="bold"/>
+
+
 
       <ImageView
         android:id="@+id/edit"

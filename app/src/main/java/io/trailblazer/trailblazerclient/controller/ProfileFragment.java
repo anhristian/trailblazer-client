@@ -23,6 +23,7 @@ public class ProfileFragment extends Fragment {
   private UserViewModel userViewModel;
   private User user;
   private ImageView editProfile;
+  private EditText editUsername;
   private EditText editName;
   private EditText editAge;
   private EditText editWeight;
@@ -35,10 +36,12 @@ public class ProfileFragment extends Fragment {
     view = inflater.inflate(R.layout.profile_fragment, container, false);
     context = container.getContext();
     editProfile = view.findViewById(R.id.edit);
+    editUsername = view.findViewById(R.id.edit_username);
     editName = view.findViewById(R.id.edit_name);
     editAge = view.findViewById(R.id.edit_age);
     editWeight = view.findViewById(R.id.edit_weight);
     editHeight = view.findViewById(R.id.edit_height);
+    editUsername.setEnabled(false);
     editName.setEnabled(false);
     editAge.setEnabled(false);
     editWeight.setEnabled(false);
@@ -48,16 +51,16 @@ public class ProfileFragment extends Fragment {
 //      user = new User();
 //    }
     if (savedInstanceState == null) {
-      populateFields();
+//      populateFields();
     }
 
     return view;
   }
 
-  private void populateFields() {
-    if (user.getUsername() != null) {
-      editName.setText(user.getUsername());
-    }
-  }
+//  private void populateFields() {
+//    if (user.getUsername() != null) {
+//      editName.setText(user.getUsername());
+//    }
+//  }
 
 }
