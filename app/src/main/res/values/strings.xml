@@ -22,4 +22,6 @@
   <string name="weight">Weight</string>
   <string name="height">Height (inches)</string>
   <string name="username">Username</string>
+  <string name="first_name">First name</string>
+  <string name="last_name">Last name</string>
 </resources>

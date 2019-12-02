@@ -37,7 +37,7 @@ public class ProfileFragment extends Fragment {
     context = container.getContext();
     editProfile = view.findViewById(R.id.edit);
     editUsername = view.findViewById(R.id.edit_username);
-    editName = view.findViewById(R.id.edit_name);
+    editName = view.findViewById(R.id.edit_first_name);
     editAge = view.findViewById(R.id.edit_age);
     editWeight = view.findViewById(R.id.edit_weight);
     editHeight = view.findViewById(R.id.edit_height);
@@ -57,10 +57,10 @@ public class ProfileFragment extends Fragment {
     return view;
   }
 
-//  private void populateFields() {
-//    if (user.getUsername() != null) {
-//      editName.setText(user.getUsername());
-//    }
-//  }
+  private void populateFields() {
+    if (user.getUsername() != null) {
+      editName.setText(user.getUsername());
+    }
+  }
 
 }
