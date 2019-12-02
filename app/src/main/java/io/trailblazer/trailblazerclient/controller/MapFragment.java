@@ -73,7 +73,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     MapsInitializer.initialize(context);
 
     googleMap.setMyLocationEnabled(true);
-    googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+    googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
     LocationService.getInstance().setCurrentLocation();
     LocationService.getInstance().getCurrentLocation().observe(this, (location) -> {
       CameraPosition here = CameraPosition.builder()
