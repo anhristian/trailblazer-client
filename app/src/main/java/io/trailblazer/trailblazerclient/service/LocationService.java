@@ -47,7 +47,7 @@ public class LocationService implements LocationListener {
         != PackageManager.PERMISSION_GRANTED) {
       return;
     }
-//
+
 //    LocationServices.getFusedLocationProviderClient(applicationContext)
 //        .requestLocationUpdates().addOnSuccessListener()
 
