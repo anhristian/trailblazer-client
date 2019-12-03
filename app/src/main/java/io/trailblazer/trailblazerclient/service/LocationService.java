@@ -44,9 +44,9 @@ public class LocationService extends LocationCallback implements LocationListene
   private List<Location> locations;
   private MutableLiveData<Location> currentLocation;
   private FusedLocationProviderClient fusedLocationProviderClient;
+  private HandlerThread mBackgroundThread;
 
   private Handler mBackgroundHandler;
-  private HandlerThread mBackgroundThread;
 
 
   public LocationService() {
@@ -56,7 +56,6 @@ public class LocationService extends LocationCallback implements LocationListene
 
     currentLocation = new MutableLiveData<>();
     mBackgroundThread = new HandlerThread("looperThread");
-    mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
 
   }
 
@@ -104,16 +103,20 @@ public class LocationService extends LocationCallback implements LocationListene
 
   private LocationRequest createLocationRequest() {
     LocationRequest locationRequest = new LocationRequest();
-    locationRequest.setInterval(10000);
-    locationRequest.setFastestInterval(5000);
+    locationRequest.setInterval(100);
+    locationRequest.setFastestInterval(50);
     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     return locationRequest;
   }
 
 
   private void startLocationUpdates() {
-    fusedLocationProviderClient
-        .requestLocationUpdates(createLocationRequest(), this, mBackgroundHandler.getLooper());
+    mBackgroundThread = new HandlerThread("location");
+    mBackgroundThread.start();
+    mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
+
+    LocationServices.getFusedLocationProviderClient(applicationContext)
+        .requestLocationUpdates(createLocationRequest(), this, mBackgroundThread.getLooper());
   }
 
   @Override
@@ -126,6 +129,7 @@ public class LocationService extends LocationCallback implements LocationListene
 
     }
   }
+
 
   @Override
   public void onLocationChanged(Location location) {
