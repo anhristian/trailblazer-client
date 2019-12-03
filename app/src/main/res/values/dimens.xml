@@ -1,3 +1,8 @@
+<!--
+  ~ This work is Copyright, 2019, Isaac Lindland, Joel Bond, Khizar Saleem, Justin Dominguez
+  ~ All rights reserved
+  -->
+
 <resources>
   <!-- Default screen margins, per the Android Design guidelines. -->
   <dimen name="activity_horizontal_margin">16dp</dimen>

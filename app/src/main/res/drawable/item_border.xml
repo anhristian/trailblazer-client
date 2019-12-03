@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--
+  ~ This work is Copyright, 2019, Isaac Lindland, Joel Bond, Khizar Saleem, Justin Dominguez
+  ~ All rights reserved
+  -->
+
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
   android:shape="rectangle">
   <corners android:radius="5dp"/>
