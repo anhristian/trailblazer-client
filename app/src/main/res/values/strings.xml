@@ -1,3 +1,8 @@
+<!--
+  ~ This work is Copyright, 2019, Isaac Lindland, Joel Bond, Khizar Saleem, Justin Dominguez
+  ~ All rights reserved
+  -->
+
 <resources>
   <string name="app_name">trailblazer-client</string>
   <string name="title_home">Home</string>
