@@ -24,7 +24,8 @@ public class ProfileFragment extends Fragment {
   private User user;
   private ImageView editProfile;
   private EditText editUsername;
-  private EditText editName;
+  private EditText editFirstName;
+  private EditText editLastName;
   private EditText editAge;
   private EditText editWeight;
   private EditText editHeight;
@@ -37,12 +38,14 @@ public class ProfileFragment extends Fragment {
     context = container.getContext();
     editProfile = view.findViewById(R.id.edit);
     editUsername = view.findViewById(R.id.edit_username);
-    editName = view.findViewById(R.id.edit_name);
+    editFirstName = view.findViewById(R.id.edit_first_name);
+    editLastName = view.findViewById(R.id.edit_last_name);
     editAge = view.findViewById(R.id.edit_age);
     editWeight = view.findViewById(R.id.edit_weight);
     editHeight = view.findViewById(R.id.edit_height);
     editUsername.setEnabled(false);
-    editName.setEnabled(false);
+    editFirstName.setEnabled(false);
+    editLastName.setEnabled(false);
     editAge.setEnabled(false);
     editWeight.setEnabled(false);
     editHeight.setEnabled(false);
