@@ -38,7 +38,7 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
     userCharacteristic = new MutableLiveData<>();
   }
 
-  public void setUser() {
+  public void requestUserCharacteristics() {
     pending.add(
         NetworkService.getInstance().getUser(getAuthorizationHeader())
         .subscribeOn(Schedulers.io())

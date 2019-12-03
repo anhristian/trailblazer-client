@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity
     signInService = GoogleSignInService.getInstance();
     signInService.getAccount().observe(this, (account) -> {
           trailViewViewModel.setAccount(account);
-      userViewModel.setUser();
+      userViewModel.requestUserCharacteristics();
         }
     );
   }

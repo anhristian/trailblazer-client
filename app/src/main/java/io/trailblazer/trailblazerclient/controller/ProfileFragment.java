@@ -38,6 +38,17 @@ public class ProfileFragment extends Fragment {
     userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
     view = inflater.inflate(R.layout.profile_fragment, container, false);
     context = container.getContext();
+    initViews();
+    setEditable(false);
+    userViewModel.requestUserCharacteristics();
+    userViewModel.getUserCharacteristic().observe(this, (userCharacteristics) -> {
+      populateFields(userCharacteristics);
+    });
+
+    return view;
+  }
+
+  private void initViews() {
     editProfile = view.findViewById(R.id.edit);
     editUsername = view.findViewById(R.id.edit_username);
     editFirstName = view.findViewById(R.id.edit_first_name);
@@ -45,30 +56,21 @@ public class ProfileFragment extends Fragment {
     editAge = view.findViewById(R.id.edit_age);
     editWeight = view.findViewById(R.id.edit_weight);
     editHeight = view.findViewById(R.id.edit_height);
-    editUsername.setEnabled(false);
-    editFirstName.setEnabled(false);
-    editLastName.setEnabled(false);
-    editAge.setEnabled(false);
-    editWeight.setEnabled(false);
-    editHeight.setEnabled(false);
-
-
-
-//    user = (User) getArguments().getSerializable("user");
-//    if (user == null) {
-//      user = new User();
-//    }
-    if (savedInstanceState == null) {
-//      populateFields();
-    }
-
-    return view;
   }
 
-//  private void populateFields() {
-//    if (user.getUsername() != null) {
-//      editName.setText(user.getUsername());
-//    }
-//  }
+  private void setEditable(boolean editable) {
+
+    editUsername.setEnabled(editable);
+    editFirstName.setEnabled(editable);
+    editLastName.setEnabled(editable);
+    editAge.setEnabled(editable);
+    editWeight.setEnabled(editable);
+    editHeight.setEnabled(editable);
+  }
+
+  private void populateFields(UserCharacteristics userCharacteristics) {
+
+  }
+
 
 }
