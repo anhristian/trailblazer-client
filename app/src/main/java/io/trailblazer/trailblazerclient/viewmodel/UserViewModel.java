@@ -27,7 +27,7 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
   private final MutableLiveData<GoogleSignInAccount> account;
-  private final MutableLiveData<UserCharacteristics> user;
+  private final MutableLiveData<UserCharacteristics> userCharacteristic;
 
 
   public UserViewModel(@NonNull Application application) {
@@ -35,19 +35,19 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     account = new MutableLiveData<>();
-    user = new MutableLiveData<>();
+    userCharacteristic = new MutableLiveData<>();
   }
 
   public void setUser() {
     pending.add(
         NetworkService.getInstance().getUser(getAuthorizationHeader())
         .subscribeOn(Schedulers.io())
-            .subscribe(this.user::postValue, this.throwable::postValue)
+            .subscribe(this.userCharacteristic::postValue, this.throwable::postValue)
     );
   }
 
-  public LiveData<UserCharacteristics> getUser() {
-    return user;
+  public LiveData<UserCharacteristics> getUserCharacteristic() {
+    return userCharacteristic;
   }
 
   public MutableLiveData<Throwable> getThrowable() {
