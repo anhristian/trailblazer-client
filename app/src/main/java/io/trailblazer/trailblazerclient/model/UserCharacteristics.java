@@ -15,6 +15,9 @@ public class UserCharacteristics implements Serializable {
   private static final long serialVersionUID = -4786245411663138394L;
 
   @Expose
+  private String username;
+
+  @Expose
   private User user;
 
   @Expose
@@ -35,6 +38,14 @@ public class UserCharacteristics implements Serializable {
 
   @Expose
   private Integer age;
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
   public User getUser() {
     return user;

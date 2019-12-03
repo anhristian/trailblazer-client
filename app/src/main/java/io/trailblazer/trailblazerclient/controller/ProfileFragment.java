@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.User;
+import io.trailblazer.trailblazerclient.model.UserCharacteristics;
 import io.trailblazer.trailblazerclient.viewmodel.UserViewModel;
 
 
@@ -22,6 +23,7 @@ public class ProfileFragment extends Fragment {
   private Context context;
   private UserViewModel userViewModel;
   private User user;
+  private UserCharacteristics userCharacteristics;
   private ImageView editProfile;
   private EditText editUsername;
   private EditText editFirstName;
@@ -49,6 +51,9 @@ public class ProfileFragment extends Fragment {
     editAge.setEnabled(false);
     editWeight.setEnabled(false);
     editHeight.setEnabled(false);
+
+
+
 //    user = (User) getArguments().getSerializable("user");
 //    if (user == null) {
 //      user = new User();
