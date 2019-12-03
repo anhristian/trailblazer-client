@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
 import io.trailblazer.trailblazerclient.service.LocationService;
@@ -41,6 +42,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   private Context context;
   private TrailViewViewModel trailViewViewModel;
   private Trail trail;
+  private FloatingActionButton startStopButton;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,10 +56,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
       @Nullable Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.maps_fragment, container, false);
     context = container.getContext();
+    startStopButton = view.findViewById(R.id.record);
+
     setRetainInstance(true);
     trailViewViewModel = ViewModelProviders.of(this)
         .get(TrailViewViewModel.class);
     Log.d(TAG, "onCreateView: ");
+
+    startStopButton.setOnClickListener((v) -> {
+      LocationService.getInstance().start();
+    });
     return view;
   }
 
@@ -79,7 +87,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     googleMap.setMyLocationEnabled(true);
     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-    LocationService.getInstance().setCurrentLocation();
+    LocationService.getInstance().requestCurrentLocation();
     LocationService.getInstance().getCurrentLocation().observe(this, (location) -> {
       CameraPosition here = CameraPosition.builder()
           .target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16).bearing(0)

@@ -13,16 +13,15 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Looper;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -33,45 +32,34 @@ import com.google.android.gms.location.LocationServices;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LocationService extends AppCompatActivity implements LocationListener, ConnectionCallbacks,
+public class LocationService extends LocationCallback implements LocationListener,
+    ConnectionCallbacks,
     OnConnectionFailedListener {
 
   private static final int PERMISSIONS_REQUEST_CODE = 1000;
+  private static final String TAG = "LocationService";
   private static Application applicationContext;
   private LocationServices locationServices;
   private LocationManager locationManager;
   private List<Location> locations;
   private MutableLiveData<Location> currentLocation;
   private FusedLocationProviderClient fusedLocationProviderClient;
-  private boolean requestingLocationUpdates;
-  private LocationCallback locationCallback;
-  private LocationRequest locationRequest;
+
+  private Handler mBackgroundHandler;
+  private HandlerThread mBackgroundThread;
 
 
   public LocationService() {
     locations = new LinkedList<>();
     locationManager = (LocationManager) applicationContext.getSystemService(
         Context.LOCATION_SERVICE);
+
     currentLocation = new MutableLiveData<>();
+    mBackgroundThread = new HandlerThread("looperThread");
+    mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
+
   }
 
-  @Override
-  protected void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-    locationCallback = new LocationCallback() {
-      @Override
-      public void onLocationResult(LocationResult locationResult) {
-        if (locationResult == null) {
-          return;
-        }
-        for (Location location : locationResult.getLocations()) {
-          // TODO Update UI with location data
-
-        }
-      }
-    };
-  }
 
   public static void setApplicationContext(Application applicationContext) {
     LocationService.applicationContext = applicationContext;
@@ -89,9 +77,10 @@ public class LocationService extends AppCompatActivity implements LocationListen
         != PackageManager.PERMISSION_GRANTED) {
       return;
     }
-
+    startLocationUpdates();
 //    LocationServices.getFusedLocationProviderClient(applicationContext)
-//        .requestLocationUpdates().addOnSuccessListener()
+//        .requestLocationUpdates()
+//        .addOnSuccessListener();
 
   }
 
@@ -99,7 +88,7 @@ public class LocationService extends AppCompatActivity implements LocationListen
     return currentLocation;
   }
 
-  public void setCurrentLocation() {
+  public void requestCurrentLocation() {
     if (applicationContext.checkSelfPermission(permission.ACCESS_FINE_LOCATION)
         != PackageManager.PERMISSION_GRANTED
         && applicationContext.checkSelfPermission(permission.ACCESS_COARSE_LOCATION)
@@ -113,24 +102,29 @@ public class LocationService extends AppCompatActivity implements LocationListen
 
   }
 
-  private void createLocationRequest() {
+  private LocationRequest createLocationRequest() {
     LocationRequest locationRequest = new LocationRequest();
     locationRequest.setInterval(10000);
     locationRequest.setFastestInterval(5000);
     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+    return locationRequest;
+  }
+
+
+  private void startLocationUpdates() {
+    fusedLocationProviderClient
+        .requestLocationUpdates(createLocationRequest(), this, mBackgroundHandler.getLooper());
   }
 
   @Override
-  protected void onResume() {
-    super.onResume();
-    if (requestingLocationUpdates) {
-      startLocationUpdates();
+  public void onLocationResult(LocationResult locationResult) {
+    if (locationResult == null) {
+      return;
     }
-  }
+    for (Location location : locationResult.getLocations()) {
+      Log.d(TAG, "onLocationResult: " + location.toString());
 
-  private void startLocationUpdates() {
-    fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper
-        .getMainLooper());
+    }
   }
 
   @Override

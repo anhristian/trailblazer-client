@@ -20,8 +20,6 @@ public class UserCharacteristics implements Serializable {
   @Expose
   private Date created;
 
-  @Expose
-  private Date updated;
 
   @Expose
   private Double weightLbs;
@@ -50,10 +48,6 @@ public class UserCharacteristics implements Serializable {
     return created;
   }
 
-
-  public Date getUpdated() {
-    return updated;
-  }
 
   public Double getWeightLbs() {
     return weightLbs;
