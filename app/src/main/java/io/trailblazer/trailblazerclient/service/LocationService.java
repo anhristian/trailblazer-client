@@ -40,8 +40,9 @@ public class LocationService extends LocationCallback implements LocationListene
   private LocationManager locationManager;
   private List<Location> locations;
   private MutableLiveData<Location> currentLocation;
-  private HandlerThread mBackgroundThread;
+  private MutableLiveData<Location> updatedLocation;
 
+  private HandlerThread mBackgroundThread;
 
 
   public LocationService() {
@@ -50,6 +51,7 @@ public class LocationService extends LocationCallback implements LocationListene
         Context.LOCATION_SERVICE);
 
     currentLocation = new MutableLiveData<>();
+    updatedLocation = new MutableLiveData<>();
     mBackgroundThread = new HandlerThread("looperThread");
 
   }
@@ -116,12 +118,18 @@ public class LocationService extends LocationCallback implements LocationListene
 
   }
 
+  public LiveData<Location> getUpdatedLocation() {
+    return updatedLocation;
+  }
+
   @Override
   public void onLocationResult(LocationResult locationResult) {
     if (locationResult == null) {
       return;
     }
     for (Location location : locationResult.getLocations()) {
+
+      updatedLocation.postValue(location);
       Log.d(TAG, "onLocationResult: " + location.toString());
       locations.add(location);
     }

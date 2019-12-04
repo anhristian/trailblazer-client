@@ -5,6 +5,7 @@
 
 package io.trailblazer.trailblazerclient.controller;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,13 +43,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   private View view;
   private TrailViewViewModel trailViewViewModel;
   private Trail trail;
+  private PolylineOptions currentMapping;
   private FloatingActionButton startStopButton;
+
+
   private boolean mapping;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
   }
 
 
@@ -58,6 +61,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     view = inflater.inflate(R.layout.maps_fragment, container, false);
     initViews();
     initListeners();
+
     return view;
   }
 
@@ -65,7 +69,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     startStopButton.setOnClickListener((v) -> {
       mapping = true;
       LocationService.getInstance().start();
+      initNewTrail();
     });
+
+    LocationService.getInstance().getUpdatedLocation().observe(this, location -> {
+      newPoint(location);
+//      Toast.makeText(getContext(), location.toString(), Toast.LENGTH_LONG).show();
+    });
+  }
+
+  private void initNewTrail() {
+    googleMap.clear();
+    currentMapping = new PolylineOptions();
+    currentMapping.color(0xff0000ff);
+    googleMap.addPolyline(currentMapping);
   }
 
   private void initViews() {
@@ -84,6 +101,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
       mapView.getMapAsync(this);
     }
   }
+
+  private void newPoint(Location location) {
+    LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+    currentMapping.add(loc);
+    CameraUpdate curr = CameraUpdateFactory.newLatLngZoom(loc, 17);
+    googleMap.animateCamera(curr);
+    startStopButton.hide();
+  }
+
 
   @Override
   public void onMapReady(GoogleMap googleMap) {
@@ -105,14 +131,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         if (trail != null) {
-          graph(trail);
+          graphSingleTrail(trail);
         }
       });
     });
 
   }
 
-  private void graph(Trail trail) {
+  private void graphSingleTrail(Trail trail) {
     googleMap.clear();
     googleMap.addMarker(
         new MarkerOptions().position(new LatLng(trail.getGeometry().getCoordinates()[0][1],
@@ -126,7 +152,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
     polyline.color(0xffff0000);
     googleMap.addPolyline(polyline);
-    CameraUpdate loc = CameraUpdateFactory.newLatLngZoom(points.get(0), 16);
+    CameraUpdate loc = CameraUpdateFactory.newLatLngZoom(points.get(0), 17);
 
     googleMap.animateCamera(loc, 6000, null);
 

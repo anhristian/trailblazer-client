@@ -40,7 +40,7 @@ import retrofit2.http.Query;
 public interface NetworkService {
 
   /**
-   * Gets instance.
+   * Gets singleton instance.
    *
    * @return the instance
    */
@@ -160,7 +160,7 @@ public interface NetworkService {
           .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
           .addConverterFactory(GsonConverterFactory.create(gson))
           .baseUrl(BuildConfig.BASE_URL)
-          .client(client)
+//          .client(client)
           .build();
       INSTANCE = retrofit.create(NetworkService.class);
     }
