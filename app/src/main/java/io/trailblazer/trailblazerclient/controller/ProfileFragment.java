@@ -60,6 +60,7 @@ public class ProfileFragment extends Fragment {
     edit.setShowAsAction(1);
     edit.setOnMenuItemClickListener(menuItem -> {
       setEditable(true);
+
       return true;
     });
     super.onCreateOptionsMenu(menu, inflater);
@@ -161,6 +162,7 @@ public class ProfileFragment extends Fragment {
     editAge.setEnabled(editable);
     editWeight.setEnabled(editable);
     editHeight.setEnabled(editable);
+    setMenuVisibility(!editable);
     saveChanges.setVisibility(editable ? View.VISIBLE : View.INVISIBLE);
   }
 
