@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         return true;
       case R.id.nav_profile_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.profile_nav);
+        getSupportActionBar().setTitle("Profile");
         getSupportActionBar().show();
         return true;
     }
