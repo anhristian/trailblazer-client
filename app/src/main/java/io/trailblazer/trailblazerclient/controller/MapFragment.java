@@ -164,8 +164,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
       googleMap.setOnMapLoadedCallback(() -> {
         if (getArguments() != null && getArguments().containsKey("trail")) {
           trail = ((Trail) getArguments().getSerializable("trail"));
-        }
-        if (trail != null) {
           graphSingleTrail(trail);
         }
       });
