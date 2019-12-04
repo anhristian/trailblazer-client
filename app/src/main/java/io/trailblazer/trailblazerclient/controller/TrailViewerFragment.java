@@ -24,6 +24,9 @@ import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.view.TrailAdapter;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 
+/**
+ * The type Trail viewer fragment.
+ */
 public class TrailViewerFragment extends Fragment {
 
   private RecyclerView recyclerView;

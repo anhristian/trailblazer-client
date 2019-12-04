@@ -35,47 +35,124 @@ import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
+/**
+ * The interface Network service.
+ */
 public interface NetworkService {
 
+  /**
+   * Gets instance.
+   *
+   * @return the instance
+   */
   static NetworkService getInstance() {
     return NetworkService.InstanceHolder.INSTANCE;
   }
 
+  /**
+   * Gets all trails.
+   *
+   * @return the all trails
+   */
   @GET("trails/public")
   Observable<List<Trail>> getAllTrails();
 
+  /**
+   * Gets my trails.
+   *
+   * @param token the token
+   * @return the my trails
+   */
   @GET("trails/mytrails")
   Observable<List<Trail>> getMyTrails(@Header("Authorization") String token);
 
+  /**
+   * Gets trails by name.
+   *
+   * @param token the token
+   * @param name  the name
+   * @return the trails by name
+   */
   @GET("trails/search")
   Observable<List<Trail>> getTrailsByName(@Header("Authorization") String token,
       @Query("name") String name);
 
+  /**
+   * Gets all authenticated.
+   *
+   * @param token the token
+   * @return the all authenticated
+   */
   @GET("trails/")
   Observable<List<Trail>> getAllAuthenticated(@Header("Authorization") String token);
 
+  /**
+   * Gets trail by id.
+   *
+   * @param token the token
+   * @param id    the id
+   * @return the trail by id
+   */
   @GET("trails/{id}")
   Single<Trail> getTrailById(@Header("Authorization") String token, @Path("id") long id);
 
+  /**
+   * Gets geometry.
+   *
+   * @param token the token
+   * @param id    the id
+   * @return the geometry
+   */
   @GET("{id}/geometry")
   Observable<Geometry> getGeometry(@Header("Authorization") String token, @Path("id") long id);
 
+  /**
+   * Gets user.
+   *
+   * @param token the token
+   * @return the user
+   */
+  @GET("user/")
   @GET("user")
   Single<UserCharacteristics> getUser(@Header("Authorization") String token);
 
+  /**
+   * Update a single user characteristics.
+   *
+   * @param token               the token
+   * @param userCharacteristics the user characteristics
+   * @return the single
+   */
+  @PUT("user/")
   @PUT("user")
   Single<UserCharacteristics> updateUser(@Header("Authorization") String token,
       @Body UserCharacteristics userCharacteristics);
 
+  /**
+   * Update single username .
+   *
+   * @param token               the token
+   * @param userCharacteristics the user characteristics
+   * @return the single
+   */
   @PUT("user/username")
   Single<User> updateUsername(@Header("Authorization") String token,
       @Body UserCharacteristics userCharacteristics);
 
+  /**
+   * Post single trail .
+   *
+   * @param token the token
+   * @param trail the trail
+   * @return the single
+   */
   @POST("trails")
   Single<Trail> postTrail(@Header("Authorization") String token, @Body Trail trail);
 
 
-
+  /**
+   * The type Instance holder.
+   */
   class InstanceHolder {
 
 
@@ -101,6 +178,14 @@ public interface NetworkService {
       INSTANCE = retrofit.create(NetworkService.class);
     }
 
+    /**
+     * Gets instance.
+     *
+     * @return the instance
+     */
+    static NetworkService getInstance() {
+      return InstanceHolder.INSTANCE;
+    }
 
   }
 

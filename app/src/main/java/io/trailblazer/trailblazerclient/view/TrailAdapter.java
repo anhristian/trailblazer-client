@@ -21,6 +21,9 @@ import io.trailblazer.trailblazerclient.view.TrailAdapter.Holder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Trail adapter.
+ */
 public class TrailAdapter extends Adapter<Holder> {
 
 
@@ -28,6 +31,12 @@ public class TrailAdapter extends Adapter<Holder> {
   private final List<Trail> trails;
   private final OnClickListener clickListener;
 
+  /**
+   * Instantiates a new Trail adapter.
+   *
+   * @param context       the context
+   * @param clickListener the click listener
+   */
   public TrailAdapter(Context context,
       OnClickListener clickListener) {
     this.context = context;
@@ -54,17 +63,35 @@ public class TrailAdapter extends Adapter<Holder> {
     return trails.size();
   }
 
+  /**
+   * Sets trails.
+   *
+   * @param trails the trails
+   */
   public void setTrails(List<Trail> trails) {
     this.trails.clear();
     this.trails.addAll(trails);
   }
 
+  /**
+   * The interface On click listener.
+   */
   @FunctionalInterface
   public interface OnClickListener {
 
+    /**
+     * On click.
+     *
+     * @param view     the view
+     * @param position the position
+     * @param trail    the trail
+     */
     void onClick(View view, int position, Trail trail);
   }
 
+  /**
+   * The type Holder.
+   */
   public class Holder extends ViewHolder {
 
     private final View view;
@@ -72,6 +99,11 @@ public class TrailAdapter extends Adapter<Holder> {
     private TextView creator;
     private TextView trailName;
 
+    /**
+     * Instantiates a new Holder.
+     *
+     * @param itemView the item view
+     */
     public Holder(@NonNull View itemView) {
       super(itemView);
       background = itemView.findViewById(R.id.trail_image_background);

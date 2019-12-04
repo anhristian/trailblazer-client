@@ -22,6 +22,9 @@ import io.trailblazer.trailblazerclient.service.GoogleSignInService;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 import io.trailblazer.trailblazerclient.viewmodel.UserViewModel;
 
+/**
+ * The type Main activity.
+ */
 public class MainActivity extends AppCompatActivity
     implements BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -113,6 +116,11 @@ public class MainActivity extends AppCompatActivity
         });
   }
 
+  /**
+   * Refresh's sign in.
+   *
+   * @param runnable the runnable
+   */
   public void refreshSignIn(Runnable runnable) {
     signInService.refresh()
         .addOnSuccessListener((account) -> runnable.run())

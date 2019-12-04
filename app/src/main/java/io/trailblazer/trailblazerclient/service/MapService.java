@@ -9,6 +9,9 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Vibrator;
 
+/**
+ * The type Map service.
+ */
 public class MapService {
 
   private static Application applicationContext;
@@ -18,10 +21,20 @@ public class MapService {
     vibrator = (Vibrator) applicationContext.getSystemService(Context.VIBRATOR_SERVICE);
   }
 
+  /**
+   * Sets application context.
+   *
+   * @param applicationContext the application context
+   */
   public static void setApplicationContext(Application applicationContext) {
     MapService.applicationContext = applicationContext;
   }
 
+  /**
+   * Gets instance.
+   *
+   * @return the instance
+   */
   public static MapService getInstance() {
     return MapService.InstanceHolder.INSTANCE;
   }

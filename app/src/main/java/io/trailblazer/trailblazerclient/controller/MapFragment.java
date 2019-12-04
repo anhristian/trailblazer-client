@@ -33,6 +33,9 @@ import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Map fragment.
+ */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
   private static final String TAG = "mapfragment";

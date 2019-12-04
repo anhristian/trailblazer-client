@@ -17,6 +17,9 @@ import io.trailblazer.trailblazerclient.model.UserCharacteristics;
 import io.trailblazer.trailblazerclient.viewmodel.UserViewModel;
 
 
+/**
+ * The type Profile fragment.
+ */
 public class ProfileFragment extends Fragment {
 
 

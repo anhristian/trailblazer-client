@@ -13,52 +13,28 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.util.Log;
 import android.widget.Toast;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LocationService extends LocationCallback implements LocationListener,
-    ConnectionCallbacks,
-    OnConnectionFailedListener {
+public class LocationService implements LocationListener {
 
   private static final int PERMISSIONS_REQUEST_CODE = 1000;
-  private static final String TAG = "LocationService";
   private static Application applicationContext;
   private LocationServices locationServices;
   private LocationManager locationManager;
   private List<Location> locations;
   private MutableLiveData<Location> currentLocation;
-  private FusedLocationProviderClient fusedLocationProviderClient;
-  private HandlerThread mBackgroundThread;
-
-  private Handler mBackgroundHandler;
-
 
   public LocationService() {
     locations = new LinkedList<>();
     locationManager = (LocationManager) applicationContext.getSystemService(
         Context.LOCATION_SERVICE);
-
     currentLocation = new MutableLiveData<>();
-    mBackgroundThread = new HandlerThread("looperThread");
-
   }
-
 
   public static void setApplicationContext(Application applicationContext) {
     LocationService.applicationContext = applicationContext;
@@ -76,10 +52,9 @@ public class LocationService extends LocationCallback implements LocationListene
         != PackageManager.PERMISSION_GRANTED) {
       return;
     }
-    startLocationUpdates();
+//
 //    LocationServices.getFusedLocationProviderClient(applicationContext)
-//        .requestLocationUpdates()
-//        .addOnSuccessListener();
+//        .requestLocationUpdates().addOnSuccessListener()
 
   }
 
@@ -87,7 +62,7 @@ public class LocationService extends LocationCallback implements LocationListene
     return currentLocation;
   }
 
-  public void requestCurrentLocation() {
+  public void setCurrentLocation() {
     if (applicationContext.checkSelfPermission(permission.ACCESS_FINE_LOCATION)
         != PackageManager.PERMISSION_GRANTED
         && applicationContext.checkSelfPermission(permission.ACCESS_COARSE_LOCATION)
@@ -100,36 +75,6 @@ public class LocationService extends LocationCallback implements LocationListene
         });
 
   }
-
-  private LocationRequest createLocationRequest() {
-    LocationRequest locationRequest = new LocationRequest();
-    locationRequest.setInterval(100);
-    locationRequest.setFastestInterval(50);
-    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-    return locationRequest;
-  }
-
-
-  private void startLocationUpdates() {
-    mBackgroundThread = new HandlerThread("location");
-    mBackgroundThread.start();
-    mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
-
-    LocationServices.getFusedLocationProviderClient(applicationContext)
-        .requestLocationUpdates(createLocationRequest(), this, mBackgroundThread.getLooper());
-  }
-
-  @Override
-  public void onLocationResult(LocationResult locationResult) {
-    if (locationResult == null) {
-      return;
-    }
-    for (Location location : locationResult.getLocations()) {
-      Log.d(TAG, "onLocationResult: " + location.toString());
-
-    }
-  }
-
 
   @Override
   public void onLocationChanged(Location location) {
@@ -150,22 +95,6 @@ public class LocationService extends LocationCallback implements LocationListene
   public void onProviderDisabled(String provider) {
     Toast.makeText(applicationContext, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
   }
-
-  @Override
-  public void onConnected(@Nullable Bundle bundle) {
-
-  }
-
-  @Override
-  public void onConnectionSuspended(int i) {
-
-  }
-
-  @Override
-  public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-  }
-
 
   private static class InstanceHolder {
 

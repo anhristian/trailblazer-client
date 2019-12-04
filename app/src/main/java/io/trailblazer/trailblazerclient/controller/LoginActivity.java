@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.service.GoogleSignInService;
 
+/**
+ * The type Login activity.
+ */
 public class LoginActivity extends AppCompatActivity {
 
   private static final int LOGIN_REQUEST_CODE = 1000;
