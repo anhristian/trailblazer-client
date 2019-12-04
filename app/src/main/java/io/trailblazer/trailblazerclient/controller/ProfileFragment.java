@@ -69,7 +69,13 @@ public class ProfileFragment extends Fragment {
   }
 
   private void populateFields(UserCharacteristics userCharacteristics) {
+    if (userCharacteristics.getUsername() != null) {
+      editUsername.setText(userCharacteristics.getUsername());
+    }
 
+    if (userCharacteristics.getFirstName() != null) {
+      editFirstName.setText(userCharacteristics.getFirstName());
+    }
   }
 
 
