@@ -84,6 +84,22 @@ public class ProfileFragment extends Fragment {
     if (userCharacteristics.getFirstName() != null) {
       editFirstName.setText(userCharacteristics.getFirstName());
     }
+
+    if (userCharacteristics.getLastName() != null) {
+      editLastName.setText(userCharacteristics.getLastName());
+    }
+
+    if (userCharacteristics.getAge() != null) {
+      editAge.setText(userCharacteristics.getAge().toString());
+    }
+
+    if (userCharacteristics.getWeightLbs() != null) {
+      editWeight.setText(userCharacteristics.getWeightLbs().toString());
+    }
+
+    if (userCharacteristics.getHeightInches() != null) {
+      editHeight.setText(userCharacteristics.getHeightInches().toString());
+    }
   }
 
 

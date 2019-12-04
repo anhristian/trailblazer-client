@@ -59,8 +59,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="70dp"
         android:hint="@string/username"
+        android:gravity="center"
         android:textColor="#000000"
-        android:textSize="24sp"
+        android:textSize="30sp"
         android:textStyle="bold"/>
 
 
@@ -97,6 +98,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         android:inputType="textPersonName"
+
         android:hint="@string/first_name"/>
 
       <EditText
