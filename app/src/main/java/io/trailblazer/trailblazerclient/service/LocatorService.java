@@ -27,10 +27,11 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LocationService extends LocationCallback implements LocationListener,
+public class LocatorService extends LocationCallback implements LocationListener,
     ConnectionCallbacks,
     OnConnectionFailedListener {
 
@@ -45,7 +46,7 @@ public class LocationService extends LocationCallback implements LocationListene
   private HandlerThread mBackgroundThread;
 
 
-  public LocationService() {
+  public LocatorService() {
     locations = new LinkedList<>();
     locationManager = (LocationManager) applicationContext.getSystemService(
         Context.LOCATION_SERVICE);
@@ -58,40 +59,27 @@ public class LocationService extends LocationCallback implements LocationListene
 
 
   public static void setApplicationContext(Application applicationContext) {
-    LocationService.applicationContext = applicationContext;
+    LocatorService.applicationContext = applicationContext;
   }
 
-  public static LocationService getInstance() {
+  public static LocatorService getInstance() {
     return InstanceHolder.INSTANCE;
   }
 
-  public void start() {
-
-    if (applicationContext.checkSelfPermission(permission.ACCESS_FINE_LOCATION)
-        != PackageManager.PERMISSION_GRANTED
-        && applicationContext.checkSelfPermission(permission.ACCESS_COARSE_LOCATION)
-        != PackageManager.PERMISSION_GRANTED) {
-      return;
-    }
-    startLocationUpdates();
-  }
 
   public LiveData<Location> getCurrentLocation() {
     return currentLocation;
   }
 
-  public void requestCurrentLocation() {
+
+  public Task<Location> requestCurrentLocation() {
     if (applicationContext.checkSelfPermission(permission.ACCESS_FINE_LOCATION)
         != PackageManager.PERMISSION_GRANTED
         && applicationContext.checkSelfPermission(permission.ACCESS_COARSE_LOCATION)
         != PackageManager.PERMISSION_GRANTED) {
-      return;
+      return null;
     }
-    LocationServices.getFusedLocationProviderClient(applicationContext).getLastLocation()
-        .addOnSuccessListener(location -> {
-          currentLocation.postValue(location);
-        });
-
+    return LocationServices.getFusedLocationProviderClient(applicationContext).getLastLocation();
   }
 
   private LocationRequest createLocationRequest() {
@@ -103,7 +91,14 @@ public class LocationService extends LocationCallback implements LocationListene
   }
 
 
-  private void startLocationUpdates() {
+  public void startLocationUpdates() {
+    if (applicationContext.checkSelfPermission(permission.ACCESS_FINE_LOCATION)
+        != PackageManager.PERMISSION_GRANTED
+        && applicationContext.checkSelfPermission(permission.ACCESS_COARSE_LOCATION)
+        != PackageManager.PERMISSION_GRANTED) {
+      return;
+    }
+
     mBackgroundThread = new HandlerThread("location");
     mBackgroundThread.start();
     LocationServices.getFusedLocationProviderClient(applicationContext)
@@ -174,7 +169,7 @@ public class LocationService extends LocationCallback implements LocationListene
 
   private static class InstanceHolder {
 
-    private static final LocationService INSTANCE = new LocationService();
+    private static final LocatorService INSTANCE = new LocatorService();
   }
 
 

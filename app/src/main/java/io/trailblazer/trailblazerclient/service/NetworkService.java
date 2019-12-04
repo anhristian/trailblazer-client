@@ -20,9 +20,6 @@ import io.trailblazer.trailblazerclient.model.UserCharacteristics;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -146,11 +143,11 @@ public interface NetworkService {
     private static final NetworkService INSTANCE;
 
     static {
-      HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-      interceptor.setLevel(Level.BODY);
-      OkHttpClient client = new OkHttpClient.Builder()
-          .addInterceptor(interceptor)
-          .build();
+//      HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+//      interceptor.setLevel(Level.BODY);
+//      OkHttpClient client = new OkHttpClient.Builder()
+//          .addInterceptor(interceptor)
+//          .build();
 
       Gson gson = new GsonBuilder()
           .excludeFieldsWithoutExposeAnnotation()

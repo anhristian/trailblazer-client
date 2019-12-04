@@ -5,11 +5,13 @@
 
 package io.trailblazer.trailblazerclient.controller;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,15 +23,18 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
-import io.trailblazer.trailblazerclient.service.LocationService;
+import io.trailblazer.trailblazerclient.service.LocatorService;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -37,17 +42,23 @@ import java.util.List;
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+
   private static final String TAG = "mapfragment";
+  private static final int START_RAD = 2;
+  private static final int LINE_WIDTH = 8;
+
+
   private GoogleMap googleMap;
   private MapView mapView;
   private View view;
   private TrailViewViewModel trailViewViewModel;
   private Trail trail;
-  private PolylineOptions currentMapping;
-  private FloatingActionButton startStopButton;
+  private PolylineOptions polylineOptions;
+  private Polyline currentMapping;
+  private List<LatLng> points;
+  private ImageButton startStopButton;
+  private boolean recording;
 
-
-  private boolean mapping;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,33 +72,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     view = inflater.inflate(R.layout.maps_fragment, container, false);
     initViews();
     initListeners();
+    points = new LinkedList<>();
 
     return view;
   }
 
   private void initListeners() {
     startStopButton.setOnClickListener((v) -> {
-      mapping = true;
-      LocationService.getInstance().start();
-      initNewTrail();
+      if (!recording) {
+        LocatorService.getInstance().startLocationUpdates();
+        recordNewTrail();
+        startStopButton.setBackgroundResource(R.drawable.stop_recording_shape);
+        recording = true;
+
+      } else {
+        recording = false;
+        LocatorService.getInstance().stopLocationUpdates();
+        startStopButton.setBackgroundResource(R.drawable.start_recording_shape);
+      }
+
     });
 
-    LocationService.getInstance().getUpdatedLocation().observe(this, location -> {
+    LocatorService.getInstance().getUpdatedLocation().observe(this, location -> {
       newPoint(location);
 //      Toast.makeText(getContext(), location.toString(), Toast.LENGTH_LONG).show();
     });
   }
 
-  private void initNewTrail() {
-    googleMap.clear();
-    currentMapping = new PolylineOptions();
-    currentMapping.color(0xff0000ff);
-    googleMap.addPolyline(currentMapping);
-  }
 
   private void initViews() {
     setRetainInstance(true);
     startStopButton = view.findViewById(R.id.record);
+    startStopButton.setBackgroundResource(R.drawable.start_recording_shape);
   }
 
   @Override
@@ -102,12 +118,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
   }
 
+  private void recordNewTrail() {
+    googleMap.clear();
+    points.clear();
+    polylineOptions = new PolylineOptions()
+        .color(Color.BLUE)
+        .jointType(JointType.ROUND);
+
+    //    polylineOptions.width(LINE_WIDTH);
+
+    LocatorService.getInstance().requestCurrentLocation().addOnSuccessListener(location -> {
+      CircleOptions startPoint = new CircleOptions();
+      startPoint.fillColor(0x5f0000ff)
+          .center(locationToLatLng(location))
+          .radius(START_RAD)
+          .strokeColor(0x9f0000f9);
+      googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(locationToLatLng(location), 20));
+      googleMap.addCircle(startPoint);
+    });
+
+    currentMapping = googleMap.addPolyline(polylineOptions);
+  }
+
   private void newPoint(Location location) {
     LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
-    currentMapping.add(loc);
-    CameraUpdate curr = CameraUpdateFactory.newLatLngZoom(loc, 17);
+    points.add(loc);
+    currentMapping.setPoints(points);
+    CameraUpdate curr = CameraUpdateFactory.newLatLng(loc);
     googleMap.animateCamera(curr);
-    startStopButton.hide();
   }
 
 
@@ -117,25 +155,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     this.googleMap = googleMap;
     googleMap.setMyLocationEnabled(true);
     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-    LocationService.getInstance().requestCurrentLocation();
-    LocationService.getInstance().getCurrentLocation().observe(this, (location) -> {
+    LocatorService.getInstance().requestCurrentLocation().addOnSuccessListener(location -> {
       CameraPosition here = CameraPosition.builder()
           .target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(16).bearing(0)
           .build();
       googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(here));
 
       googleMap.setOnMapLoadedCallback(() -> {
-
         if (getArguments() != null && getArguments().containsKey("trail")) {
           trail = ((Trail) getArguments().getSerializable("trail"));
         }
-
         if (trail != null) {
           graphSingleTrail(trail);
         }
       });
     });
-
   }
 
   private void graphSingleTrail(Trail trail) {
@@ -175,5 +209,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     });
   }
 
+  private LatLng locationToLatLng(Location location) {
+    return new LatLng(location.getLatitude(), location.getLongitude());
+  }
 
+  @Override
+  public void onPause() {
+    super.onPause();
+    if (recording) {
+      LocatorService.getInstance().stopLocationUpdates();
+      recording = false;
+    }
+  }
 }

@@ -10,4 +10,7 @@
   <color name="colorAccent">#D81B60</color>
   <color name="colorScroll"></color>
 
+
+  <color name="buttonOuter">#ffff0000</color>
+
 </resources>

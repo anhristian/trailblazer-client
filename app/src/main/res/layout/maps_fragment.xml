@@ -14,7 +14,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"/>
 
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
+  <ImageButton
     android:id="@+id/record"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -22,9 +22,7 @@
     android:clickable="true"
     android:elevation="5dp"
     android:focusable="true"
-    android:scaleX="1.2"
     android:layout_gravity="bottom|center"
-    android:scaleY="1.2"
     />
 
 </FrameLayout>

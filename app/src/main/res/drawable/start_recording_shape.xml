@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ This work is Copyright, 2019, Isaac Lindland, Joel Bond, Khizar Saleem, Justin Dominguez
+  ~ All rights reserved
+  -->
+<layer-list>
+
+
+  <item>
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+      android:shape="rectangle"
+      android:tint="#0000">
+      <corners
+        android:radius="60dp"/>
+      <size
+        android:height="60dp"
+        android:width="60dp"/>
+      <stroke
+        android:color="@color/buttonOuter"
+        android:width="2dp"/>
+    </shape>
+  </item>
+
+
+  <item>
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+      android:shape="rectangle"
+      android:tint="@color/buttonOuter">
+      <corners
+        android:radius="50dp"/>
+      <size
+        android:height="50dp"
+        android:width="50dp"/>
+
+    </shape>
+  </item>
+
+</layer-list>
+
+
+  <!--<item>-->
+  <!--<shape xmlns:android="http://schemas.android.com/apk/res/android"-->
+  <!--  android:shape="oval"-->
+  <!--  android:innerRadius="50dp"-->
+  <!--  android:tint="@android:color/holo_red_dark">-->
+  <!--</shape>-->
+  <!--</item>-->
