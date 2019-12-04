@@ -2,7 +2,6 @@ package io.trailblazer.trailblazerclient.controller;
 
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,12 +55,44 @@ public class ProfileFragment extends Fragment {
     });
     saveChanges.setOnClickListener(v -> {
       userViewModel.updateUserCharacteristics(getFields());
+      setEditable(false);
     });
   }
 
   private UserCharacteristics getFields() {
+    UserCharacteristics userCharacteristics = new UserCharacteristics();
+    String parsed;
+    if (!editUsername.getText().toString().equals("")) {
+      parsed = editUsername.getText().toString();
+      userCharacteristics.setUsername(parsed);
+    }
 
-    return null;
+    if (!editFirstName.getText().toString().equals("")) {
+      parsed = editFirstName.getText().toString();
+      userCharacteristics.setFirstName(parsed);
+    }
+
+    if (!editLastName.getText().toString().equals("")) {
+      parsed = editLastName.getText().toString();
+      userCharacteristics.setLastName(parsed);
+    }
+
+    if (!editAge.getText().toString().equals("")) {
+      int age = Integer.parseInt(editAge.getText().toString());
+      userCharacteristics.setAge(age);
+    }
+
+    if (!editHeight.getText().toString().equals("")) {
+      double height = Double.parseDouble(editHeight.getText().toString());
+      userCharacteristics.setHeightInches(height);
+    }
+
+    if (!editWeight.getText().toString().equals("")) {
+      double weight = Double.parseDouble(editWeight.getText().toString());
+      userCharacteristics.setWeightLbs(weight);
+    }
+
+    return userCharacteristics;
   }
 
   @Override
@@ -100,7 +131,6 @@ public class ProfileFragment extends Fragment {
   }
 
   private void populateFields(UserCharacteristics userCharacteristics) {
-    Log.d(TAG, "populateFields: " + userCharacteristics);
 
     if (userCharacteristics.getUsername() != null) {
       editUsername.setText(userCharacteristics.getUsername());
