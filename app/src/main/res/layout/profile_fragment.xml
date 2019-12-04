@@ -43,6 +43,7 @@
       android:inputType="textPersonName"
       android:hint="@string/username"
       android:textColor="#ffffff"
+      android:imeOptions="actionDone"
       android:textColorHighlight="#ffffff"
       android:textColorHint="#ffffff"
       android:shadowColor="#ffffff"
@@ -96,6 +97,7 @@
       android:textColorHighlight="#ffffff"
       android:textColorHint="#ffffff"
       android:shadowColor="#ffffff"
+      android:imeOptions="actionDone"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/edit_last_name"/>
 
@@ -109,6 +111,7 @@
       android:textColorHint="#ffffff"
       android:shadowColor="#ffffff"
       android:inputType="number"
+      android:imeOptions="actionDone"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@id/edit_age"
       app:layout_constraintTop_toBottomOf="@id/edit_last_name"/>
@@ -123,6 +126,7 @@
       android:textColorHint="#ffffff"
       android:shadowColor="#ffffff"
       android:inputType="number"
+      android:imeOptions="actionDone"
       app:layout_constraintTop_toBottomOf="@id/edit_age"/>
 
 
@@ -136,8 +140,9 @@
       android:textColorHint="#ffffff"
       android:shadowColor="#ffffff"
       android:inputType="textPersonName"
-
+      android:imeOptions="actionDone"
       app:layout_constraintTop_toTopOf="parent"/>
+
     <EditText
       android:id="@+id/edit_last_name"
       android:layout_width="match_parent"
@@ -148,6 +153,7 @@
       android:textColorHint="#ffffff"
       android:shadowColor="#ffffff"
       android:inputType="textPersonName"
+      android:imeOptions="actionDone"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/edit_first_name"/>
 
