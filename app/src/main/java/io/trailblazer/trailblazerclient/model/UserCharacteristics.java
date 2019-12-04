@@ -84,8 +84,7 @@ public class UserCharacteristics implements Serializable {
    *
    * @return the updated
    */
-  public Date getUpdated() {
-    return updated;
+
   public void setCreated(Date created) {
     this.created = created;
   }

@@ -112,7 +112,7 @@ public interface NetworkService {
    * @param token the token
    * @return the user
    */
-  @GET("user/")
+
   @GET("user")
   Single<UserCharacteristics> getUser(@Header("Authorization") String token);
 
@@ -123,7 +123,7 @@ public interface NetworkService {
    * @param userCharacteristics the user characteristics
    * @return the single
    */
-  @PUT("user/")
+
   @PUT("user")
   Single<UserCharacteristics> updateUser(@Header("Authorization") String token,
       @Body UserCharacteristics userCharacteristics);
