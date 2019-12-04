@@ -4,7 +4,7 @@
   -->
 
 <resources>
-  <string name="app_name">trailblazer-client</string>
+  <string name="app_name">Trail Blazer</string>
   <string name="title_home">Home</string>
   <string name="title_dashboard">Dashboard</string>
   <string name="title_notifications">Notifications</string>
@@ -29,4 +29,6 @@
   <string name="username">Username</string>
   <string name="first_name">First name</string>
   <string name="last_name">Last name</string>
+  <string name="public_trails">Public Trails</string>
+  <string name="your_trails">Your Trails</string>
 </resources>

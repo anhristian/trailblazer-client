@@ -6,6 +6,7 @@
 package io.trailblazer.trailblazerclient.controller;
 
 import android.Manifest.permission;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity
   private GoogleSignInService signInService;
   private TrailViewViewModel trailViewViewModel;
   private UserViewModel userViewModel;
+  private ActionBar actionBar;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity
     BottomNavigationView navigation = findViewById(R.id.navigation);
     navigation.setOnNavigationItemSelectedListener(this);
     navigation.setSelectedItemId(R.id.nav_map_item);
-
+    actionBar = getActionBar();
     ActivityCompat.requestPermissions(this,
         new String[]{
             permission.ACCESS_FINE_LOCATION,
@@ -74,12 +76,15 @@ public class MainActivity extends AppCompatActivity
     switch (item.getItemId()) {
       case R.id.nav_explore_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.trail_viewer_nav);
+        getSupportActionBar().hide();
         return true;
       case R.id.nav_map_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.map_nav);
+        getSupportActionBar().hide();
         return true;
       case R.id.nav_profile_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.profile_nav);
+        getSupportActionBar().show();
         return true;
     }
     return false;
