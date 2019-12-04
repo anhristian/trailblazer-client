@@ -9,6 +9,7 @@ import com.google.gson.annotations.Expose;
 import java.io.Serializable;
 import java.util.Date;
 
+
 public class UserCharacteristics implements Serializable {
 
 
@@ -59,6 +60,9 @@ public class UserCharacteristics implements Serializable {
     return created;
   }
 
+  public void setCreated(Date created) {
+    this.created = created;
+  }
 
   public Double getWeightLbs() {
     return weightLbs;
@@ -99,5 +103,4 @@ public class UserCharacteristics implements Serializable {
   public void setAge(Integer age) {
     this.age = age;
   }
-
 }

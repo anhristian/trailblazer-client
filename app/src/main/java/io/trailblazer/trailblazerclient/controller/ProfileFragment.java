@@ -1,17 +1,18 @@
 package io.trailblazer.trailblazerclient.controller;
 
 
-import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import io.trailblazer.trailblazerclient.R;
-import io.trailblazer.trailblazerclient.model.User;
 import io.trailblazer.trailblazerclient.model.UserCharacteristics;
 import io.trailblazer.trailblazerclient.viewmodel.UserViewModel;
 
@@ -19,10 +20,9 @@ import io.trailblazer.trailblazerclient.viewmodel.UserViewModel;
 public class ProfileFragment extends Fragment {
 
 
+  private static final String TAG = "ProfileFragment";
   private View view;
-  private Context context;
   private UserViewModel userViewModel;
-  private User user;
   private UserCharacteristics userCharacteristics;
   private ImageView editProfile;
   private EditText editUsername;
@@ -35,17 +35,20 @@ public class ProfileFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
-    userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
     view = inflater.inflate(R.layout.profile_fragment, container, false);
-    context = container.getContext();
     initViews();
     setEditable(false);
-    userViewModel.requestUserCharacteristics();
-    userViewModel.getUserCharacteristic().observe(this, (userCharacteristics) -> {
-      populateFields(userCharacteristics);
-    });
 
     return view;
+  }
+
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
+    userViewModel.getUserCharacteristic().observe(this, this::populateFields);
+    userViewModel.requestUserCharacteristics();
+
   }
 
   private void initViews() {
@@ -69,6 +72,8 @@ public class ProfileFragment extends Fragment {
   }
 
   private void populateFields(UserCharacteristics userCharacteristics) {
+    Log.d(TAG, "populateFields: " + userCharacteristics);
+
     if (userCharacteristics.getUsername() != null) {
       editUsername.setText(userCharacteristics.getUsername());
     }
