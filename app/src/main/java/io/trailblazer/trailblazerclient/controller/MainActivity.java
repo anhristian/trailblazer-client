@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity
   private TrailViewViewModel trailViewViewModel;
   private UserViewModel userViewModel;
   private ActionBar actionBar;
-  private ProfileFragment profileFragment;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
