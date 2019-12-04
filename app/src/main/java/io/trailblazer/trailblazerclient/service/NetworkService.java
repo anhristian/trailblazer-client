@@ -11,12 +11,11 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.google.maps.android.data.Geometry;
+import com.vividsolutions.jts.geom.Geometry;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.trailblazer.trailblazerclient.BuildConfig;
 import io.trailblazer.trailblazerclient.model.Trail;
-import io.trailblazer.trailblazerclient.model.User;
 import io.trailblazer.trailblazerclient.model.UserCharacteristics;
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -123,20 +122,8 @@ public interface NetworkService {
    * @param userCharacteristics the user characteristics
    * @return the single
    */
-
   @PUT("user")
   Single<UserCharacteristics> updateUser(@Header("Authorization") String token,
-      @Body UserCharacteristics userCharacteristics);
-
-  /**
-   * Update single username .
-   *
-   * @param token               the token
-   * @param userCharacteristics the user characteristics
-   * @return the single
-   */
-  @PUT("user/username")
-  Single<User> updateUsername(@Header("Authorization") String token,
       @Body UserCharacteristics userCharacteristics);
 
   /**
@@ -178,18 +165,9 @@ public interface NetworkService {
       INSTANCE = retrofit.create(NetworkService.class);
     }
 
-    /**
-     * Gets instance.
-     *
-     * @return the instance
-     */
-    static NetworkService getInstance() {
-      return InstanceHolder.INSTANCE;
-    }
-
   }
 
-  public static class DateDeserializer implements JsonDeserializer<Date> {
+  class DateDeserializer implements JsonDeserializer<Date> {
 
     @Override
     public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)

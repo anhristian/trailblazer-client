@@ -6,17 +6,13 @@
 package io.trailblazer.trailblazerclient.model;
 
 import com.google.gson.annotations.Expose;
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * The type User characteristics.
  */
 
-public class UserCharacteristics implements Serializable {
-
-
-  private static final long serialVersionUID = -4786245411663138394L;
+public class UserCharacteristics {
 
   @Expose
   private String username;
@@ -26,7 +22,6 @@ public class UserCharacteristics implements Serializable {
 
   @Expose
   private Date created;
-
 
   @Expose
   private Double weightLbs;

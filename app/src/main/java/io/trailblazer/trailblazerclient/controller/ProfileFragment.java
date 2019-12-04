@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -51,6 +52,9 @@ public class ProfileFragment extends Fragment {
     userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
     userViewModel.getUserCharacteristic().observe(this, this::populateFields);
     userViewModel.requestUserCharacteristics();
+    userViewModel.getThrowable().observe(this, throwable -> {
+      Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
+    });
 
   }
 
