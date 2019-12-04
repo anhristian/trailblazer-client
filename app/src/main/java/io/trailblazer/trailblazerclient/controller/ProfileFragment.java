@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class ProfileFragment extends Fragment {
   private UserViewModel userViewModel;
   private UserCharacteristics userCharacteristics;
   private ImageView editProfile;
+  private Button saveChanges;
   private EditText editUsername;
   private EditText editFirstName;
   private EditText editLastName;
@@ -41,16 +43,32 @@ public class ProfileFragment extends Fragment {
       Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.profile_fragment, container, false);
     initViews();
+    initListeners();
     setEditable(false);
 
     return view;
+  }
+
+  private void initListeners() {
+    editProfile.setOnClickListener(v -> {
+      setEditable(true);
+
+    });
+    saveChanges.setOnClickListener(v -> {
+      userViewModel.updateUserCharacteristics(getFields());
+    });
+  }
+
+  private UserCharacteristics getFields() {
+
+    return null;
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-    userViewModel.getUserCharacteristic().observe(this, this::populateFields);
+    userViewModel.getUserCharacteristics().observe(this, this::populateFields);
     userViewModel.requestUserCharacteristics();
     userViewModel.getThrowable().observe(this, throwable -> {
       Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
@@ -60,12 +78,14 @@ public class ProfileFragment extends Fragment {
 
   private void initViews() {
     editProfile = view.findViewById(R.id.edit);
+    saveChanges = view.findViewById(R.id.save_changes);
     editUsername = view.findViewById(R.id.edit_username);
     editFirstName = view.findViewById(R.id.edit_first_name);
     editLastName = view.findViewById(R.id.edit_last_name);
     editAge = view.findViewById(R.id.edit_age);
     editWeight = view.findViewById(R.id.edit_weight);
     editHeight = view.findViewById(R.id.edit_height);
+
   }
 
   private void setEditable(boolean editable) {
@@ -76,6 +96,7 @@ public class ProfileFragment extends Fragment {
     editAge.setEnabled(editable);
     editWeight.setEnabled(editable);
     editHeight.setEnabled(editable);
+    saveChanges.setVisibility(editable ? View.VISIBLE : View.INVISIBLE);
   }
 
   private void populateFields(UserCharacteristics userCharacteristics) {

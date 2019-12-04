@@ -5,9 +5,7 @@
 
 package io.trailblazer.trailblazerclient.controller;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +40,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   private GoogleMap googleMap;
   private MapView mapView;
   private View view;
-  private Context context;
   private TrailViewViewModel trailViewViewModel;
   private Trail trail;
   private FloatingActionButton startStopButton;
+  private boolean mapping;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,24 +56,27 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.maps_fragment, container, false);
-    context = container.getContext();
-    startStopButton = view.findViewById(R.id.record);
+    initViews();
+    initListeners();
+    return view;
+  }
 
-    setRetainInstance(true);
-    trailViewViewModel = ViewModelProviders.of(this)
-        .get(TrailViewViewModel.class);
-    Log.d(TAG, "onCreateView: ");
-
+  private void initListeners() {
     startStopButton.setOnClickListener((v) -> {
+      mapping = true;
       LocationService.getInstance().start();
     });
-    return view;
+  }
+
+  private void initViews() {
+    setRetainInstance(true);
+    startStopButton = view.findViewById(R.id.record);
   }
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
+    trailViewViewModel = ViewModelProviders.of(this).get(TrailViewViewModel.class);
     mapView = view.findViewById(R.id.map);
     if (mapView != null) {
       mapView.onCreate(null);
@@ -86,8 +87,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
   @Override
   public void onMapReady(GoogleMap googleMap) {
-    MapsInitializer.initialize(context);
-
+    MapsInitializer.initialize(getContext());
+    this.googleMap = googleMap;
     googleMap.setMyLocationEnabled(true);
     googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
     LocationService.getInstance().requestCurrentLocation();
@@ -104,31 +105,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
         if (trail != null) {
-          graph(trail, googleMap);
+          graph(trail);
         }
       });
     });
-//
-//    CameraPosition abq = CameraPosition.builder().target(new LatLng( 35.085601, -106.649326 )).zoom(16)
-//        .bearing(0).tilt(45).build();
-//    googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(abq));
-//
-//    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-23.684, 133.903), 4));
-//
-//    Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
-//        .clickable(true)
-//        .add(
-//            new LatLng(35.16430139231649, -106.46370012666549),
-//            new LatLng(35.16415681961822, -106.46402087050099),
-//            new LatLng(35.16407902961823, -106.46422204050096),
-//            new LatLng(35.16406830961823, -106.46424081050095),
-//            new LatLng(35.16391005961822, -106.46474238050092)));
-//    googleMap.moveCamera(
-//        CameraUpdateFactory.newLatLngZoom(new LatLng(35.16430139231649, -106.46370012666549), 17));
 
   }
 
-  private void graph(Trail trail, GoogleMap googleMap) {
+  private void graph(Trail trail) {
     googleMap.clear();
     googleMap.addMarker(
         new MarkerOptions().position(new LatLng(trail.getGeometry().getCoordinates()[0][1],
@@ -148,8 +132,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
   }
 
-
-  private void graphAllTrails(GoogleMap googleMap) {
+  private void graphAllTrails() {
     trailViewViewModel.refreshPublicTrails();
     trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
       googleMap.clear();

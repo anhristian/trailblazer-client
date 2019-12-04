@@ -13,7 +13,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.HandlerThread;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,7 +23,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -39,14 +37,11 @@ public class LocationService extends LocationCallback implements LocationListene
   private static final int PERMISSIONS_REQUEST_CODE = 1000;
   private static final String TAG = "LocationService";
   private static Application applicationContext;
-  private LocationServices locationServices;
   private LocationManager locationManager;
   private List<Location> locations;
   private MutableLiveData<Location> currentLocation;
-  private FusedLocationProviderClient fusedLocationProviderClient;
   private HandlerThread mBackgroundThread;
 
-  private Handler mBackgroundHandler;
 
 
   public LocationService() {
@@ -77,10 +72,6 @@ public class LocationService extends LocationCallback implements LocationListene
       return;
     }
     startLocationUpdates();
-//    LocationServices.getFusedLocationProviderClient(applicationContext)
-//        .requestLocationUpdates()
-//        .addOnSuccessListener();
-
   }
 
   public LiveData<Location> getCurrentLocation() {
@@ -103,8 +94,8 @@ public class LocationService extends LocationCallback implements LocationListene
 
   private LocationRequest createLocationRequest() {
     LocationRequest locationRequest = new LocationRequest();
-    locationRequest.setInterval(100);
-    locationRequest.setFastestInterval(50);
+    locationRequest.setSmallestDisplacement(1f);
+    locationRequest.setInterval(0);
     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     return locationRequest;
   }
@@ -113,10 +104,16 @@ public class LocationService extends LocationCallback implements LocationListene
   private void startLocationUpdates() {
     mBackgroundThread = new HandlerThread("location");
     mBackgroundThread.start();
-    mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
-
     LocationServices.getFusedLocationProviderClient(applicationContext)
         .requestLocationUpdates(createLocationRequest(), this, mBackgroundThread.getLooper());
+  }
+
+  public void stopLocationUpdates() {
+
+    LocationServices.getFusedLocationProviderClient(applicationContext).removeLocationUpdates(this);
+    mBackgroundThread.quit();
+    mBackgroundThread = null;
+
   }
 
   @Override
@@ -126,7 +123,7 @@ public class LocationService extends LocationCallback implements LocationListene
     }
     for (Location location : locationResult.getLocations()) {
       Log.d(TAG, "onLocationResult: " + location.toString());
-
+      locations.add(location);
     }
   }
 

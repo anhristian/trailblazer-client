@@ -27,7 +27,7 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
   private final MutableLiveData<GoogleSignInAccount> account;
-  private final MutableLiveData<UserCharacteristics> userCharacteristic;
+  private final MutableLiveData<UserCharacteristics> userCharacteristics;
 
 
   public UserViewModel(@NonNull Application application) {
@@ -35,19 +35,19 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     account = new MutableLiveData<>();
-    userCharacteristic = new MutableLiveData<>();
+    userCharacteristics = new MutableLiveData<>();
   }
 
   public void requestUserCharacteristics() {
     pending.add(
         NetworkService.getInstance().getUser(getAuthorizationHeader())
-        .subscribeOn(Schedulers.io())
-            .subscribe(this.userCharacteristic::postValue, this.throwable::postValue)
+            .subscribeOn(Schedulers.io())
+            .subscribe(this.userCharacteristics::postValue, this.throwable::postValue)
     );
   }
 
-  public LiveData<UserCharacteristics> getUserCharacteristic() {
-    return userCharacteristic;
+  public LiveData<UserCharacteristics> getUserCharacteristics() {
+    return userCharacteristics;
   }
 
   public MutableLiveData<Throwable> getThrowable() {
@@ -64,12 +64,17 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
     return token;
   }
 
+  public void updateUserCharacteristics(UserCharacteristics fromFields) {
+    pending.add(
+        NetworkService.getInstance().updateUser(getAuthorizationHeader(), fromFields)
+            .subscribeOn(Schedulers.io())
+            .subscribe(userCharacteristics::postValue, throwable::postValue));
+  }
+
 
   @OnLifecycleEvent(Event.ON_STOP)
   private void clearPending() {
     pending.clear();
   }
-
-
 
 }

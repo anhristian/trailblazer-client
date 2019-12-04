@@ -4,143 +4,145 @@
   ~ All rights reserved
   -->
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   tools:context=".controller.MainActivity">
 
-  <RelativeLayout
-    android:id="@+id/layout"
+
+  <ImageView
+    android:id="@+id/header_cover_image"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="150dp"
+    android:background="?attr/selectableItemBackgroundBorderless"
+    android:contentDescription="@string/header_cover_image"
+    android:scaleType="centerCrop"
+    android:src="@mipmap/profile_background"/>
+
+  <RelativeLayout
+    android:id="@+id/profile_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/header_cover_image"
+    android:paddingBottom="24dp"
+    android:elevation="4dp">
+
+    <EditText
+      android:id="@+id/edit_username"
+      android:textStyle="bold"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="70dp"
+      android:layout_centerHorizontal="true"
+      android:gravity="center"
+      android:hint="@string/username"
+      android:textColor="#000000"
+      android:textSize="30sp"/>
 
 
     <ImageView
-      android:id="@+id/header_cover_image"
-      android:layout_width="match_parent"
-      android:layout_height="150dp"
-      android:background="?attr/selectableItemBackgroundBorderless"
-      android:scaleType="centerCrop"
-      android:src="@mipmap/profile_background"
-      android:contentDescription="@string/header_cover_image"/>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-      xmlns:app="http://schemas.android.com/apk/res-auto"
+      android:id="@+id/edit"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginLeft="16dp"
+      android:layout_marginRight="16dp"
+      android:layout_alignParentEnd="true"
       android:clickable="true"
+      android:contentDescription="@string/profile_edit"
       android:focusable="true"
-      app:civ_border_width="3dp"
-      app:civ_border_color="#000000"
-      android:id="@+id/profile"
-      android:layout_width="200dp"
-      android:layout_height="200dp"
-      android:layout_below="@+id/header_cover_image"
-      android:layout_centerHorizontal="true"
-      android:layout_marginTop="-130dp"
-      android:elevation="5dp"
-      android:padding="20dp"
-      android:scaleType="centerCrop"
-      android:src="@drawable/ic_person_black_48dp"
+      android:src="@android:drawable/ic_menu_edit"/>
+  </RelativeLayout>
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_below="@id/profile_layout"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:elevation="4dp">
+
+
+    <Button
+      android:id="@+id/save_changes"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Update Info"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
       />
 
-    <RelativeLayout
-      android:id="@+id/profile_layout"
+    <EditText
+      android:id="@+id/edit_age"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:hint="@string/age"
+      android:inputType="number"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/edit_last_name"/>
+
+    <EditText
+      android:id="@+id/edit_weight"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:hint="@string/weight"
+      android:inputType="number"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@id/edit_age"
+      app:layout_constraintTop_toBottomOf="@id/edit_last_name"/>
+
+    <EditText
+      android:id="@+id/edit_height"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_below="@+id/header_cover_image"
-      android:elevation="4dp"
-      android:paddingBottom="24dp">
-
-      <EditText
-        android:id="@+id/edit_username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        android:hint="@string/username"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        android:textStyle="bold"/>
+      android:hint="@string/height"
+      android:inputType="number"
+      app:layout_constraintTop_toBottomOf="@id/edit_age"/>
 
 
-
-      <ImageView
-        android:id="@+id/edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
-        android:clickable="true"
-        android:src="@android:drawable/ic_menu_edit"
-        android:focusable="true"
-        android:contentDescription="@string/profile_edit"/>
-    </RelativeLayout>
-    
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <EditText
+      android:id="@+id/edit_first_name"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:layout_below="@id/profile_layout"
-      android:elevation="4dp"
-      android:layout_margin="5dp"
-      android:layout_marginTop="5dp"
-      android:paddingTop="20dp"
-      android:paddingBottom="20dp"
-      android:paddingRight="5dp"
-      android:paddingLeft="5dp">
+      android:layout_height="wrap_content"
+      android:hint="@string/first_name"
+      android:inputType="textPersonName"
 
-      <EditText
-        android:id="@+id/edit_first_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:inputType="textPersonName"
+      app:layout_constraintTop_toTopOf="parent"/>
+    <EditText
+      android:id="@+id/edit_last_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:hint="@string/last_name"
+      android:inputType="textPersonName"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/edit_first_name"/>
 
-        android:hint="@string/first_name"/>
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
-      <EditText
-        android:id="@+id/edit_last_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_first_name"
-        android:inputType="textPersonName"
-        android:hint="@string/last_name"/>
+  <de.hdodenhof.circleimageview.CircleImageView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_marginTop="-130dp"
+    android:layout_below="@+id/header_cover_image"
+    android:layout_centerHorizontal="true"
+    android:padding="20dp"
+    android:clickable="true"
+    android:elevation="5dp"
+    android:focusable="true"
+    android:scaleType="centerCrop"
+    android:src="@drawable/ic_person_black_48dp"
+    app:civ_border_color="#000000"
+    app:civ_border_width="3dp"
+    />
 
-      <EditText
-        android:id="@+id/edit_age"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/edit_last_name"
-        app:layout_constraintStart_toStartOf="parent"
-        android:inputType="number"
-        android:hint="@string/age"/>
+</RelativeLayout>
 
-      <EditText
-        android:id="@+id/edit_weight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/edit_age"
-        app:layout_constraintTop_toBottomOf="@id/edit_last_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:inputType="number"
-        android:hint="@string/weight"/>
-
-      <EditText
-        android:id="@+id/edit_height"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        app:layout_constraintTop_toBottomOf="@id/edit_age"
-        android:hint="@string/height"/>
-
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-  </RelativeLayout>
-</ScrollView>
