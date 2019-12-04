@@ -3,6 +3,10 @@ package io.trailblazer.trailblazerclient.controller;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -28,7 +32,7 @@ public class ProfileFragment extends Fragment {
   private View view;
   private UserViewModel userViewModel;
   private UserCharacteristics userCharacteristics;
-  private ImageView editProfile;
+  public ImageView editProfile;
   private Button saveChanges;
   private EditText editUsername;
   private EditText editFirstName;
@@ -36,6 +40,7 @@ public class ProfileFragment extends Fragment {
   private EditText editAge;
   private EditText editWeight;
   private EditText editHeight;
+  private MenuItem edit;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,11 +49,40 @@ public class ProfileFragment extends Fragment {
     initViews();
     initListeners();
     setEditable(false);
-
+    setHasOptionsMenu(true);
     return view;
   }
 
-  private void initListeners() {
+  @Override
+  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    edit = menu.add("Edit profile");
+    edit.setIcon(R.drawable.ic_edit_white_24dp);
+    edit.setShowAsAction(1);
+    edit.setOnMenuItemClickListener(menuItem -> {
+      setEditable(true);
+      return true;
+    });
+    super.onCreateOptionsMenu(menu, inflater);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    boolean handled = true;
+    switch (item.getItemId()) {
+      case R.id.edit:
+        return true;
+      case R.id.action_settings:
+        break;
+      case R.id.sign_out:
+        break;
+      default:
+        handled = super.onOptionsItemSelected(item);
+    }
+    return handled;
+  }
+
+
+  public void initListeners() {
     editProfile.setOnClickListener(v -> {
       setEditable(true);
 
@@ -107,7 +141,7 @@ public class ProfileFragment extends Fragment {
 
   }
 
-  private void initViews() {
+  public void initViews() {
     editProfile = view.findViewById(R.id.edit);
     saveChanges = view.findViewById(R.id.save_changes);
     editUsername = view.findViewById(R.id.edit_username);
@@ -119,7 +153,7 @@ public class ProfileFragment extends Fragment {
 
   }
 
-  private void setEditable(boolean editable) {
+  public void setEditable(boolean editable) {
 
     editUsername.setEnabled(editable);
     editFirstName.setEnabled(editable);
