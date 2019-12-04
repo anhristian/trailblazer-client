@@ -9,6 +9,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@mipmap/profile_background"
   tools:context=".controller.MainActivity">
 
 
@@ -18,14 +19,16 @@
     android:layout_height="150dp"
     android:background="?attr/selectableItemBackgroundBorderless"
     android:contentDescription="@string/header_cover_image"
+
     android:scaleType="centerCrop"
-    android:src="@mipmap/profile_background"/>
+    />
 
   <RelativeLayout
     android:id="@+id/profile_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/header_cover_image"
+
+    android:layout_below="@id/header_cover_image"
     android:paddingBottom="24dp"
     android:elevation="4dp">
 
@@ -37,8 +40,12 @@
       android:layout_marginTop="70dp"
       android:layout_centerHorizontal="true"
       android:gravity="center"
+      android:inputType="textPersonName"
       android:hint="@string/username"
-      android:textColor="#000000"
+      android:textColor="#ffffff"
+      android:textColorHighlight="#ffffff"
+      android:textColorHint="#ffffff"
+      android:shadowColor="#ffffff"
       android:textSize="30sp"/>
 
 
@@ -53,7 +60,7 @@
       android:clickable="true"
       android:contentDescription="@string/profile_edit"
       android:focusable="true"
-      android:src="@android:drawable/ic_menu_edit"/>
+      />
   </RelativeLayout>
 
   <androidx.constraintlayout.widget.ConstraintLayout
@@ -73,7 +80,7 @@
       android:id="@+id/save_changes"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="Update Info"
+      android:text="@string/update_info"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
@@ -85,6 +92,10 @@
       android:layout_height="wrap_content"
       android:hint="@string/age"
       android:inputType="number"
+      android:textColor="#ffffff"
+      android:textColorHighlight="#ffffff"
+      android:textColorHint="#ffffff"
+      android:shadowColor="#ffffff"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/edit_last_name"/>
 
@@ -93,6 +104,10 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:hint="@string/weight"
+      android:textColor="#ffffff"
+      android:textColorHighlight="#ffffff"
+      android:textColorHint="#ffffff"
+      android:shadowColor="#ffffff"
       android:inputType="number"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@id/edit_age"
@@ -103,6 +118,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/height"
+      android:textColor="#ffffff"
+      android:textColorHighlight="#ffffff"
+      android:textColorHint="#ffffff"
+      android:shadowColor="#ffffff"
       android:inputType="number"
       app:layout_constraintTop_toBottomOf="@id/edit_age"/>
 
@@ -112,6 +131,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/first_name"
+      android:textColor="#ffffff"
+      android:textColorHighlight="#ffffff"
+      android:textColorHint="#ffffff"
+      android:shadowColor="#ffffff"
       android:inputType="textPersonName"
 
       app:layout_constraintTop_toTopOf="parent"/>
@@ -120,6 +143,10 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:hint="@string/last_name"
+      android:textColor="#ffffff"
+      android:textColorHighlight="#ffffff"
+      android:textColorHint="#ffffff"
+      android:shadowColor="#ffffff"
       android:inputType="textPersonName"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/edit_first_name"/>

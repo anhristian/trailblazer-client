@@ -31,4 +31,5 @@
   <string name="last_name">Last name</string>
   <string name="public_trails">Public Trails</string>
   <string name="your_trails">Your Trails</string>
+  <string name="update_info">Update Info</string>
 </resources>

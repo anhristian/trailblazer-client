@@ -8,6 +8,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   tools:context="io.trailblazer.trailblazerclient.controller.MainActivity">
 
+
   <item
     android:id="@+id/action_settings"
     android:title="@string/action_settings"

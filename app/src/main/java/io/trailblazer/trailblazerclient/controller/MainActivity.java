@@ -35,17 +35,19 @@ public class MainActivity extends AppCompatActivity
   private TrailViewViewModel trailViewViewModel;
   private UserViewModel userViewModel;
   private ActionBar actionBar;
+  private ProfileFragment profileFragment;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
     setContentView(R.layout.activity_main);
     setupViewModel();
     setupSignIn();
     Log.d(TAG, "onCreate: setting up sign-in");
     BottomNavigationView navigation = findViewById(R.id.navigation);
     navigation.setOnNavigationItemSelectedListener(this);
-    navigation.setSelectedItemId(R.id.nav_map_item);
+    navigation.setSelectedItemId(R.id.nav_explore_item);
     actionBar = getActionBar();
     ActivityCompat.requestPermissions(this,
         new String[]{
@@ -84,6 +86,7 @@ public class MainActivity extends AppCompatActivity
         return true;
       case R.id.nav_profile_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.profile_nav);
+        getSupportActionBar().setTitle("Profile");
         getSupportActionBar().show();
         return true;
     }
@@ -100,6 +103,8 @@ public class MainActivity extends AppCompatActivity
   public boolean onOptionsItemSelected(MenuItem item) {
     boolean handled = true;
     switch (item.getItemId()) {
+      case R.id.edit:
+        return false;
       case R.id.action_settings:
         break;
       case R.id.sign_out:
