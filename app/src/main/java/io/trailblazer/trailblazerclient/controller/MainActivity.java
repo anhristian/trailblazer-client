@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
   private TrailViewViewModel trailViewViewModel;
   private UserViewModel userViewModel;
   private ActionBar actionBar;
+  private int currentFragment;
 
 
   @Override
@@ -75,19 +76,29 @@ public class MainActivity extends AppCompatActivity
 
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+    if (item.getItemId() == currentFragment) {
+      return true;
+    }
+
     switch (item.getItemId()) {
       case R.id.nav_explore_item:
+
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.trail_viewer_nav);
         getSupportActionBar().hide();
+        currentFragment = R.id.nav_explore_item;
         return true;
       case R.id.nav_map_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.map_nav);
         getSupportActionBar().hide();
+        currentFragment = R.id.nav_map_item;
         return true;
       case R.id.nav_profile_item:
         Navigation.findNavController(this, R.id.container_fragment).navigate(R.id.profile_nav);
         getSupportActionBar().setTitle("Profile");
         getSupportActionBar().show();
+        currentFragment = R.id.nav_profile_item;
+
         return true;
     }
     return false;

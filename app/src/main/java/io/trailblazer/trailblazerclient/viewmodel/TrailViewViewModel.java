@@ -30,6 +30,7 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
   private final MutableLiveData<GoogleSignInAccount> account;
   private final MutableLiveData<List<Trail>> publicTrails;
   private final MutableLiveData<Trail> singleTrail;
+  private final MutableLiveData<List<Trail>> myTrails;
 
 
   public TrailViewViewModel(@NonNull Application application) {
@@ -37,6 +38,7 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();
     publicTrails = new MutableLiveData<>();
+    myTrails = new MutableLiveData<>();
     account = new MutableLiveData<>();
     singleTrail = new MutableLiveData<>();
   }
@@ -51,6 +53,14 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
         NetworkService.getInstance().getTrailById(getAuthorizationHeader(), trail.getId())
             .subscribeOn(Schedulers.io())
             .subscribe(this.singleTrail::postValue, this.throwable::postValue)
+    );
+  }
+
+  public void refreshMyTrails() {
+    pending.add(
+        NetworkService.getInstance().getMyTrails(getAuthorizationHeader())
+            .subscribeOn(Schedulers.io())
+            .subscribe(this.myTrails::postValue, this.throwable::postValue)
     );
   }
 
@@ -90,4 +100,9 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
   public LiveData<Trail> getSingleTrail() {
     return singleTrail;
   }
+
+  public LiveData<List<Trail>> getMyTrails() {
+    return myTrails;
+  }
+
 }

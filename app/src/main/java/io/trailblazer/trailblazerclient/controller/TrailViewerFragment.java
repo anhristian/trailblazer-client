@@ -5,7 +5,6 @@
 
 package io.trailblazer.trailblazerclient.controller;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +19,10 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayout.BaseOnTabSelectedListener;
+import com.google.android.material.tabs.TabLayout.Tab;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.view.TrailAdapter;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
@@ -32,7 +35,10 @@ public class TrailViewerFragment extends Fragment {
   private RecyclerView recyclerView;
   private View view;
   private TrailViewViewModel trailViewViewModel;
-  private Context context;
+  private TabItem myTrailsTab;
+  private TabItem publicTrailsTab;
+  private TrailAdapter trailAdapter;
+  private TabLayout tabs;
 
 
   @Override
@@ -40,25 +46,59 @@ public class TrailViewerFragment extends Fragment {
       Bundle savedInstanceState) {
     trailViewViewModel = ViewModelProviders.of(this).get(TrailViewViewModel.class);
     view = inflater.inflate(R.layout.trail_view_fragment, container, false);
-    context = container.getContext();
-    recyclerView = view.findViewById(R.id.trail_view);
+    initViews();
+    initListeners();
+
     trailViewViewModel.refreshPublicTrails();
-    trailViewViewModel.getThrowable().observe(this, (throwable) -> {
-      Toast.makeText(context, throwable.getMessage(), Toast.LENGTH_LONG).show();
-    });
+
     return view;
   }
+
+  private void initViews() {
+    recyclerView = view.findViewById(R.id.trail_view);
+    tabs = view.findViewById(R.id.tabs);
+  }
+
+  private void initListeners() {
+    tabs.addOnTabSelectedListener(new BaseOnTabSelectedListener() {
+      @Override
+      public void onTabSelected(Tab tab) {
+        if (tab.getPosition() == 0) {
+          trailViewViewModel.refreshPublicTrails();
+          getAllTrails();
+        } else if (tab.getPosition() == 1) {
+          trailViewViewModel.refreshMyTrails();
+          getMyTrails();
+        }
+
+      }
+
+      @Override
+      public void onTabUnselected(Tab tab) {
+
+      }
+
+      @Override
+      public void onTabReselected(Tab tab) {
+
+      }
+    });
+    trailViewViewModel.getThrowable().observe(this, (throwable) -> {
+      Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
+    });
+  }
+
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     LayoutAnimationController animation = AnimationUtils
-        .loadLayoutAnimation(context, R.anim.layout_animation_fall_down);
+        .loadLayoutAnimation(getContext(), R.anim.layout_animation_fall_down);
     recyclerView.setLayoutAnimation(animation);
 
-    LinearLayoutManager mLayoutManager = new LinearLayoutManager(context);
+    LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
     recyclerView.setLayoutManager(mLayoutManager);
-    TrailAdapter trailAdapter = new TrailAdapter(context, (v, position, trail) -> {
+    trailAdapter = new TrailAdapter(getContext(), (v, position, trail) -> {
       trailViewViewModel.getTrail(trail);
       trailViewViewModel.getSingleTrail().observe(this, (t) -> {
         Bundle bundle = new Bundle();
@@ -67,16 +107,25 @@ public class TrailViewerFragment extends Fragment {
       });
     });
     recyclerView.setAdapter(trailAdapter);
-    getAllTrails(trailAdapter);
-
+    getAllTrails();
 
   }
 
-  private void getAllTrails(TrailAdapter trailAdapter) {
+  private void getAllTrails() {
     trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
       trailAdapter.setTrails(trails);
       recyclerView.getAdapter().notifyDataSetChanged();
       recyclerView.scheduleLayoutAnimation();
+    });
+  }
+
+
+  private void getMyTrails() {
+    trailViewViewModel.getMyTrails().observe(this, (trails) -> {
+      trailAdapter.setTrails(trails);
+      recyclerView.getAdapter().notifyDataSetChanged();
+      recyclerView.scheduleLayoutAnimation();
+
     });
   }
 

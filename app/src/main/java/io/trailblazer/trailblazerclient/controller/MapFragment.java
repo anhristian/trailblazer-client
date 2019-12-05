@@ -94,8 +94,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     });
 
     LocatorService.getInstance().getUpdatedLocation().observe(this, location -> {
-      newPoint(location);
-//      Toast.makeText(getContext(), location.toString(), Toast.LENGTH_LONG).show();
+      if (location != null) {
+        newPoint(location);
+      }
     });
   }
 

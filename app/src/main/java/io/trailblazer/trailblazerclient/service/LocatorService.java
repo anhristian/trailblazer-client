@@ -14,7 +14,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.HandlerThread;
-import android.util.Log;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +27,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.Task;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,9 +40,8 @@ public class LocatorService extends LocationCallback implements LocationListener
   private static Application applicationContext;
   private LocationManager locationManager;
   private List<Location> locations;
-  private MutableLiveData<Location> currentLocation;
   private MutableLiveData<Location> updatedLocation;
-
+  private MutableLiveData<List<Location>> locationList;
   private HandlerThread mBackgroundThread;
 
 
@@ -51,12 +50,11 @@ public class LocatorService extends LocationCallback implements LocationListener
     locationManager = (LocationManager) applicationContext.getSystemService(
         Context.LOCATION_SERVICE);
 
-    currentLocation = new MutableLiveData<>();
+    locationList = new MutableLiveData<>(new ArrayList<>());
     updatedLocation = new MutableLiveData<>();
     mBackgroundThread = new HandlerThread("looperThread");
 
   }
-
 
   public static void setApplicationContext(Application applicationContext) {
     LocatorService.applicationContext = applicationContext;
@@ -66,11 +64,9 @@ public class LocatorService extends LocationCallback implements LocationListener
     return InstanceHolder.INSTANCE;
   }
 
-
-  public LiveData<Location> getCurrentLocation() {
-    return currentLocation;
+  public LiveData<List<Location>> getLocationList() {
+    return locationList;
   }
-
 
   public Task<Location> requestCurrentLocation() {
     if (applicationContext.checkSelfPermission(permission.ACCESS_FINE_LOCATION)
@@ -90,6 +86,9 @@ public class LocatorService extends LocationCallback implements LocationListener
     return locationRequest;
   }
 
+  public LiveData<Location> getUpdatedLocation() {
+    return updatedLocation;
+  }
 
   public void startLocationUpdates() {
     if (applicationContext.checkSelfPermission(permission.ACCESS_FINE_LOCATION)
@@ -108,14 +107,12 @@ public class LocatorService extends LocationCallback implements LocationListener
   public void stopLocationUpdates() {
 
     LocationServices.getFusedLocationProviderClient(applicationContext).removeLocationUpdates(this);
+    locationList.getValue().clear();
     mBackgroundThread.quit();
     mBackgroundThread = null;
 
   }
 
-  public LiveData<Location> getUpdatedLocation() {
-    return updatedLocation;
-  }
 
   @Override
   public void onLocationResult(LocationResult locationResult) {
@@ -123,11 +120,14 @@ public class LocatorService extends LocationCallback implements LocationListener
       return;
     }
     for (Location location : locationResult.getLocations()) {
-
+      locationList.getValue().add(location);
+      locationList.postValue(locationList.getValue());
       updatedLocation.postValue(location);
-      Log.d(TAG, "onLocationResult: " + location.toString());
-      locations.add(location);
     }
+  }
+
+  public LiveData<List<Location>> getUpdatedLocations() {
+    return locationList;
   }
 
 

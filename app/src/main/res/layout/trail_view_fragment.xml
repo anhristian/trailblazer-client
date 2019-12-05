@@ -13,11 +13,11 @@
   android:background="@android:color/background_dark"
   tools:context=".controller.MainActivity">
 
-  <androidx.viewpager.widget.ViewPager
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+  <!--  <androidx.viewpager.widget.ViewPager-->
+  <!--    android:id="@+id/container"-->
+  <!--    android:layout_width="match_parent"-->
+  <!--    android:layout_height="match_parent"-->
+  <!--    app:layout_behavior="@string/appbar_scrolling_view_behavior"/>-->
 
   <com.google.android.material.appbar.AppBarLayout
     android:id="@+id/appbar"
