@@ -19,8 +19,25 @@
     android:layout_height="150dp"
     android:background="?attr/selectableItemBackgroundBorderless"
     android:contentDescription="@string/header_cover_image"
-
     android:scaleType="centerCrop"
+    />
+
+  <de.hdodenhof.circleimageview.CircleImageView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/profile"
+    android:layout_width="200dp"
+    android:layout_height="200dp"
+    android:layout_marginTop="-150dp"
+    android:layout_below="@+id/header_cover_image"
+    android:layout_centerHorizontal="true"
+    android:padding="20dp"
+    android:clickable="true"
+    android:elevation="5dp"
+    android:focusable="true"
+    android:scaleType="centerCrop"
+    android:src="@drawable/default_profile_photo"
+    app:civ_border_color="#000000"
+    app:civ_border_width="3dp"
     />
 
   <RelativeLayout
@@ -28,26 +45,36 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
-    android:layout_below="@id/header_cover_image"
-    android:paddingBottom="24dp"
+    android:layout_below="@id/profile"
+    android:paddingBottom="17dp"
     android:elevation="4dp">
 
-    <EditText
-      android:id="@+id/edit_username"
-      android:textStyle="bold"
-      android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/username_layout"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="70dp"
-      android:layout_centerHorizontal="true"
+
+      app:hintEnabled="true"
+      app:hintAnimationEnabled="true"
       android:gravity="center"
-      android:inputType="textPersonName"
-      android:hint="@string/username"
-      android:textColor="#ffffff"
-      android:imeOptions="actionDone"
-      android:textColorHighlight="#ffffff"
-      android:textColorHint="#ffffff"
-      android:shadowColor="#ffffff"
-      android:textSize="30sp"/>
+      >
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edit_username"
+        android:textStyle="bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:inputType="textPersonName"
+        android:hint="@string/username"
+        android:textColor="#ffffff"
+        android:imeOptions="actionDone"
+        android:textColorHighlight="#ffffff"
+        android:textColorHint="#ffffff"
+        android:shadowColor="#ffffff"
+        android:textSize="30sp"/>
+    </com.google.android.material.textfield.TextInputLayout>
 
 
     <ImageView
@@ -75,6 +102,14 @@
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:elevation="4dp">
+
+    <androidx.constraintlayout.widget.Guideline
+      android:id="@+id/vertical_guideline"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintGuide_percent="0.5"
+      android:orientation="vertical"/>
+
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -134,10 +169,11 @@
       app:hintAnimationEnabled="true"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@id/last_name_layout"
+      app:layout_constraintEnd_toStartOf="@id/vertical_guideline"
       app:boxBackgroundMode="outline">
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_age"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/age"
         android:inputType="number"
@@ -150,17 +186,18 @@
 
     <com.google.android.material.textfield.TextInputLayout
       android:id="@+id/weight_layout"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       app:hintEnabled="true"
       app:hintAnimationEnabled="true"
       app:boxBackgroundMode="outline"
+
       app:layout_constraintTop_toBottomOf="@id/last_name_layout"
-      app:layout_constraintStart_toEndOf="@id/age_layout"
+      app:layout_constraintStart_toEndOf="@id/vertical_guideline"
       app:layout_constraintEnd_toEndOf="parent">
       <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/edit_weight"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/weight"
         android:textColor="#ffffff"
@@ -209,23 +246,6 @@
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 
-  <de.hdodenhof.circleimageview.CircleImageView
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/profile"
-    android:layout_width="200dp"
-    android:layout_height="200dp"
-    android:layout_marginTop="-130dp"
-    android:layout_below="@+id/header_cover_image"
-    android:layout_centerHorizontal="true"
-    android:padding="20dp"
-    android:clickable="true"
-    android:elevation="5dp"
-    android:focusable="true"
-    android:scaleType="centerCrop"
-    android:src="@drawable/default_profile_photo"
-    app:civ_border_color="#000000"
-    app:civ_border_width="3dp"
-    />
 
 </RelativeLayout>
 

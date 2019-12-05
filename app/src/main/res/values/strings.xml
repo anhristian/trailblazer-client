@@ -24,7 +24,7 @@
   <string name="profile_edit">profile edit</string>
   <string name="name">Name</string>
   <string name="age">Age</string>
-  <string name="weight">Weight</string>
+  <string name="weight">Weight (pounds)</string>
   <string name="height">Height (inches)</string>
   <string name="username">Username</string>
   <string name="first_name">First name</string>
