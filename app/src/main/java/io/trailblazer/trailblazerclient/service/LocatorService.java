@@ -73,14 +73,13 @@ public class LocatorService extends LocationCallback implements LocationListener
         != PackageManager.PERMISSION_GRANTED
         && applicationContext.checkSelfPermission(permission.ACCESS_COARSE_LOCATION)
         != PackageManager.PERMISSION_GRANTED) {
-      return null;
-    }
+      }
     return LocationServices.getFusedLocationProviderClient(applicationContext).getLastLocation();
   }
 
   private LocationRequest createLocationRequest() {
     LocationRequest locationRequest = new LocationRequest();
-    locationRequest.setSmallestDisplacement(1f);
+    locationRequest.setSmallestDisplacement(0f);
     locationRequest.setInterval(0);
     locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
     return locationRequest;

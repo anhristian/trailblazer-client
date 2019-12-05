@@ -20,7 +20,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayout.BaseOnTabSelectedListener;
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener;
 import com.google.android.material.tabs.TabLayout.Tab;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.view.TrailAdapter;
@@ -57,7 +57,7 @@ public class TrailViewerFragment extends Fragment {
   }
 
   private void initListeners() {
-    tabs.addOnTabSelectedListener(new BaseOnTabSelectedListener() {
+    tabs.addOnTabSelectedListener(new OnTabSelectedListener() {
       @Override
       public void onTabSelected(Tab tab) {
         if (tab.getPosition() == 0) {

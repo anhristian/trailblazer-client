@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.navigation.Navigation;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -90,7 +89,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         recording = false;
         LocatorService.getInstance().stopLocationUpdates();
         startStopButton.setBackgroundResource(R.drawable.start_recording_shape);
-        Navigation.findNavController(view).navigate(R.id.trail_review_nav);
+        TrailReviewFragment trailReviewFragment = TrailReviewFragment.newInstance();
+        trailReviewFragment.show(getFragmentManager(), "Trail Review");
       }
 
     });

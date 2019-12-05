@@ -12,6 +12,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,20 +37,17 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TrailReviewFragment extends Fragment implements OnMapReadyCallback {
+public class TrailReviewFragment extends DialogFragment implements OnMapReadyCallback {
 
 
   private View view;
   private GoogleMap googleMap;
   private MapView mapView;
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    view = inflater.inflate(R.layout.trail_review_fragment, container, false);
 
-    return view;
+  private TrailReviewFragment() {
   }
+
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -59,30 +60,16 @@ public class TrailReviewFragment extends Fragment implements OnMapReadyCallback 
     }
   }
 
+  public static TrailReviewFragment newInstance() {
+    TrailReviewFragment fragment = new TrailReviewFragment();
+    return fragment;
+  }
+
+  @Nullable
   @Override
-  public void onMapReady(GoogleMap googleMap) {
-    MapsInitializer.initialize(getContext());
-    this.googleMap = googleMap;
-    LocatorService.getInstance().getLocationList().observe(this, locations -> {
-      if (locations.size() != 0) {
-        List<LatLng> points = locationsToLatLng(locations);
-        googleMap.addMarker(new MarkerOptions().position(points.get(0)));
-        Builder bounds = new Builder();
-        for (LatLng point : points) {
-          bounds.include(point);
-        }
-        PolylineOptions polylineOptions = new PolylineOptions()
-            .color(Color.BLUE)
-            .jointType(JointType.ROUND);
-
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 15));
-
-        googleMap.setOnMapLoadedCallback(() -> {
-          Polyline polyline = googleMap.addPolyline(polylineOptions);
-          polyline.setPoints(points);
-        });
-      }
-    });
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    return view;
   }
 
   private List<LatLng> locationsToLatLng(List<Location> locations) {
@@ -91,5 +78,52 @@ public class TrailReviewFragment extends Fragment implements OnMapReadyCallback 
       p.add(new LatLng(location.getLatitude(), location.getLongitude()));
     }
     return p;
+  }
+
+  @Override
+  public void onMapReady(GoogleMap googleMap) {
+    MapsInitializer.initialize(getContext());
+    this.googleMap = googleMap;
+
+    googleMap.setOnMapLoadedCallback(() -> {
+      LocatorService.getInstance().getLocationList().observe(this, locations -> {
+        if (locations.size() != 0) {
+          List<LatLng> points = locationsToLatLng(locations);
+          googleMap.addMarker(new MarkerOptions().position(points.get(0)));
+          Builder bounds = new Builder();
+          for (LatLng point : points) {
+            bounds.include(point);
+          }
+          PolylineOptions polylineOptions = new PolylineOptions()
+              .color(Color.BLUE)
+              .jointType(JointType.ROUND);
+
+          googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 15));
+
+          googleMap.setOnMapLoadedCallback(() -> {
+            Polyline polyline = googleMap.addPolyline(polylineOptions);
+            polyline.setPoints(points);
+          });
+        }
+      });
+    });
+
+  }
+
+  @NonNull
+  @Override
+  public AlertDialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+    view = getActivity().getLayoutInflater().inflate(R.layout.trail_review_fragment, null);
+    return new AlertDialog.Builder(getContext())
+//        .setTitle(getString(R.string.new_trail))
+        .setView(view)
+        .setNegativeButton(getString(R.string.cancel), (dialog, button) -> {
+        })
+        .setPositiveButton(getString(R.string.ok), (dialog, button) -> accept())
+        .create();
+  }
+
+  private void accept() {
+    // TODO handle trail posting
   }
 }
