@@ -32,4 +32,5 @@
   <string name="public_trails">Public Trails</string>
   <string name="your_trails">Your Trails</string>
   <string name="update_info">Update Info</string>
+  <string name="trail_name">Enter a trail name</string>
 </resources>

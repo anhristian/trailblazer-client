@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.Navigation;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,7 +33,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.Trail;
 import io.trailblazer.trailblazerclient.service.LocatorService;
-import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
+import io.trailblazer.trailblazerclient.viewmodel.TrailViewModel;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   private GoogleMap googleMap;
   private MapView mapView;
   private View view;
-  private TrailViewViewModel trailViewViewModel;
+  private TrailViewModel trailViewModel;
   private Trail trail;
   private PolylineOptions polylineOptions;
   private Polyline currentMapping;
@@ -89,6 +90,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         recording = false;
         LocatorService.getInstance().stopLocationUpdates();
         startStopButton.setBackgroundResource(R.drawable.start_recording_shape);
+        Navigation.findNavController(view).navigate(R.id.trail_review_nav);
       }
 
     });
@@ -110,7 +112,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    trailViewViewModel = ViewModelProviders.of(this).get(TrailViewViewModel.class);
+    trailViewModel = ViewModelProviders.of(this).get(TrailViewModel.class);
     mapView = view.findViewById(R.id.map);
     if (mapView != null) {
       mapView.onCreate(null);
@@ -192,8 +194,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   }
 
   private void graphAllTrails() {
-    trailViewViewModel.refreshPublicTrails();
-    trailViewViewModel.getPublicTrails().observe(this, (trails) -> {
+    trailViewModel.refreshPublicTrails();
+    trailViewModel.getPublicTrails().observe(this, (trails) -> {
       googleMap.clear();
       for (Trail trail : trails) {
         PolylineOptions polyline = new PolylineOptions();

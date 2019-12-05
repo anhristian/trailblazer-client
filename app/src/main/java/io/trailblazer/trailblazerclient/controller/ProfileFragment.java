@@ -1,12 +1,12 @@
 package io.trailblazer.trailblazerclient.controller;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.model.UserCharacteristics;
+import io.trailblazer.trailblazerclient.service.GoogleSignInService;
 import io.trailblazer.trailblazerclient.viewmodel.UserViewModel;
 
 
@@ -55,6 +56,7 @@ public class ProfileFragment extends Fragment {
 
   @Override
   public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    inflater.inflate(R.menu.menu_main, menu);
     edit = menu.add("Edit profile");
     edit.setIcon(R.drawable.ic_edit_white_24dp);
     edit.setShowAsAction(1);
@@ -66,6 +68,7 @@ public class ProfileFragment extends Fragment {
     super.onCreateOptionsMenu(menu, inflater);
   }
 
+
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     boolean handled = true;
@@ -75,6 +78,7 @@ public class ProfileFragment extends Fragment {
       case R.id.action_settings:
         break;
       case R.id.sign_out:
+        signOut();
         break;
       default:
         handled = super.onOptionsItemSelected(item);
@@ -193,5 +197,14 @@ public class ProfileFragment extends Fragment {
     }
   }
 
+
+  private void signOut() {
+    GoogleSignInService.getInstance().signOut()
+        .addOnCompleteListener((task) -> {
+          Intent intent = new Intent(getContext(), LoginActivity.class);
+          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+          startActivity(intent);
+        });
+  }
 
 }

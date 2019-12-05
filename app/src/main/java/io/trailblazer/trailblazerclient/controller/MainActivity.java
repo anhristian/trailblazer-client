@@ -10,7 +10,6 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +19,7 @@ import androidx.navigation.Navigation;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import io.trailblazer.trailblazerclient.R;
 import io.trailblazer.trailblazerclient.service.GoogleSignInService;
-import io.trailblazer.trailblazerclient.viewmodel.TrailViewViewModel;
+import io.trailblazer.trailblazerclient.viewmodel.TrailViewModel;
 import io.trailblazer.trailblazerclient.viewmodel.UserViewModel;
 
 /**
@@ -32,7 +31,7 @@ public class MainActivity extends AppCompatActivity
   private static final String TAG = "main_activity";
   private static final int PERMISSIONS_REQUEST_CODE = 1000;
   private GoogleSignInService signInService;
-  private TrailViewViewModel trailViewViewModel;
+  private TrailViewModel trailViewModel;
   private UserViewModel userViewModel;
   private ActionBar actionBar;
   private int currentFragment;
@@ -58,9 +57,9 @@ public class MainActivity extends AppCompatActivity
   }
 
   private void setupViewModel() {
-    trailViewViewModel = ViewModelProviders.of(this).get(TrailViewViewModel.class);
+    trailViewModel = ViewModelProviders.of(this).get(TrailViewModel.class);
     userViewModel = ViewModelProviders.of(this).get(UserViewModel.class);
-    getLifecycle().addObserver(trailViewViewModel);
+    getLifecycle().addObserver(trailViewModel);
     getLifecycle().addObserver(userViewModel);
 
   }
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity
   private void setupSignIn() {
     signInService = GoogleSignInService.getInstance();
     signInService.getAccount().observe(this, (account) -> {
-          trailViewViewModel.setAccount(account);
+      trailViewModel.setAccount(account);
       userViewModel.requestUserCharacteristics();
         }
     );
@@ -104,28 +103,28 @@ public class MainActivity extends AppCompatActivity
     return false;
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
-  }
+//  @Override
+//  public boolean onCreateOptionsMenu(Menu menu) {
+//    getMenuInflater().inflate(R.menu.menu_main, menu);
+//    return true;
+//  }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    boolean handled = true;
-    switch (item.getItemId()) {
-      case R.id.edit:
-        return false;
-      case R.id.action_settings:
-        break;
-      case R.id.sign_out:
-        signOut();
-        break;
-      default:
-        handled = super.onOptionsItemSelected(item);
-    }
-    return handled;
-  }
+//  @Override
+//  public boolean onOptionsItemSelected(MenuItem item) {
+//    boolean handled = true;
+//    switch (item.getItemId()) {
+//      case R.id.edit:
+//        return false;
+//      case R.id.action_settings:
+//        break;
+//      case R.id.sign_out:
+//        signOut();
+//        break;
+//      default:
+//        handled = super.onOptionsItemSelected(item);
+//    }
+//    return handled;
+//  }
 
 
   private void signOut() {

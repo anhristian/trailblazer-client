@@ -23,7 +23,7 @@ import io.trailblazer.trailblazerclient.service.GoogleSignInService;
 import io.trailblazer.trailblazerclient.service.NetworkService;
 import java.util.List;
 
-public class TrailViewViewModel extends AndroidViewModel implements LifecycleObserver {
+public class TrailViewModel extends AndroidViewModel implements LifecycleObserver {
 
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
@@ -33,7 +33,7 @@ public class TrailViewViewModel extends AndroidViewModel implements LifecycleObs
   private final MutableLiveData<List<Trail>> myTrails;
 
 
-  public TrailViewViewModel(@NonNull Application application) {
+  public TrailViewModel(@NonNull Application application) {
     super(application);
     throwable = new MutableLiveData<>();
     pending = new CompositeDisposable();

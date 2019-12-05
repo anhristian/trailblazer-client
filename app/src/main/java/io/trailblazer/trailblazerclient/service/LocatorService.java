@@ -107,10 +107,8 @@ public class LocatorService extends LocationCallback implements LocationListener
   public void stopLocationUpdates() {
 
     LocationServices.getFusedLocationProviderClient(applicationContext).removeLocationUpdates(this);
-    locationList.getValue().clear();
     mBackgroundThread.quit();
     mBackgroundThread = null;
-
   }
 
 

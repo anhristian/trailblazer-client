@@ -38,13 +38,7 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
     userCharacteristics = new MutableLiveData<>();
   }
 
-  public void requestUserCharacteristics() {
-    pending.add(
-        NetworkService.getInstance().getUser(getAuthorizationHeader())
-            .subscribeOn(Schedulers.io())
-            .subscribe(this.userCharacteristics::postValue, this.throwable::postValue)
-    );
-  }
+
 
   public LiveData<UserCharacteristics> getUserCharacteristics() {
     return userCharacteristics;
@@ -57,12 +51,20 @@ public class UserViewModel extends AndroidViewModel implements LifecycleObserver
 
   private String getAuthorizationHeader() {
     // FIXME finish adding token to viewmodel instead of querying signinservice
-    String token = getApplication()
-        .getString(R.string.oauth_header,
-            GoogleSignInService.getInstance().getAccount().getValue().getIdToken());
+    String token = getApplication().getString(R.string.oauth_header,
+        GoogleSignInService.getInstance().getAccount().getValue().getIdToken());
     Log.d("OAuth2.0 token", token);
     return token;
   }
+
+  public void requestUserCharacteristics() {
+    pending.add(
+        NetworkService.getInstance().getUser(getAuthorizationHeader())
+            .subscribeOn(Schedulers.io())
+            .subscribe(this.userCharacteristics::postValue, this.throwable::postValue)
+    );
+  }
+
 
   public void updateUserCharacteristics(UserCharacteristics fromFields) {
     pending.add(
