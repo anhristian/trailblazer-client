@@ -31,7 +31,7 @@ public class TrailViewModel extends AndroidViewModel implements LifecycleObserve
   private final MutableLiveData<List<Trail>> publicTrails;
   private final MutableLiveData<Trail> singleTrail;
   private final MutableLiveData<List<Trail>> myTrails;
-
+  private final MutableLiveData<Trail> postedTrail;
 
   public TrailViewModel(@NonNull Application application) {
     super(application);
@@ -41,11 +41,16 @@ public class TrailViewModel extends AndroidViewModel implements LifecycleObserve
     myTrails = new MutableLiveData<>();
     account = new MutableLiveData<>();
     singleTrail = new MutableLiveData<>();
+    postedTrail = new MutableLiveData<>();
   }
 
 
   public LiveData<List<Trail>> getPublicTrails() {
     return publicTrails;
+  }
+
+  public LiveData<Trail> getPostedTrail() {
+    return postedTrail;
   }
 
   public void getTrail(Trail trail) {
@@ -69,6 +74,14 @@ public class TrailViewModel extends AndroidViewModel implements LifecycleObserve
         NetworkService.getInstance().getAllTrails()
             .subscribeOn(Schedulers.io())
             .subscribe(this.publicTrails::postValue, this.throwable::postValue)
+    );
+  }
+
+  public void postTrail(Trail trail) {
+    pending.add(
+        NetworkService.getInstance().postTrail(getAuthorizationHeader(), trail)
+            .subscribeOn(Schedulers.io())
+            .subscribe(this.postedTrail::postValue, this.throwable::postValue)
     );
   }
 

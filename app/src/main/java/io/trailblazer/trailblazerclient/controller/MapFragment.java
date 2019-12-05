@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -87,6 +88,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
       } else {
         recording = false;
+        googleMap.clear();
         LocatorService.getInstance().stopLocationUpdates();
         startStopButton.setBackgroundResource(R.drawable.start_recording_shape);
         TrailReviewFragment trailReviewFragment = TrailReviewFragment.newInstance();
@@ -100,6 +102,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         newPoint(location);
       }
     });
+
+
   }
 
 
@@ -113,6 +117,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     trailViewModel = ViewModelProviders.of(this).get(TrailViewModel.class);
+    trailViewModel.getThrowable().observe(this, throwable -> {
+      Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+    });
     mapView = view.findViewById(R.id.map);
     if (mapView != null) {
       mapView.onCreate(null);
@@ -174,22 +181,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   }
 
   private void graphSingleTrail(Trail trail) {
-    googleMap.clear();
-    googleMap.addMarker(
-        new MarkerOptions().position(new LatLng(trail.getGeometry().getCoordinates()[0][1],
-            trail.getGeometry().getCoordinates()[0][0])).title(trail.getName()));
-    PolylineOptions polyline = new PolylineOptions();
-    List<LatLng> points = new ArrayList<>();
-    for (double[] coordinate : trail.getGeometry().getCoordinates()) {
-      LatLng latLng = new LatLng(coordinate[1], coordinate[0]);
-      points.add(latLng);
-      polyline.add(latLng);
-    }
-    polyline.color(0xffff0000);
-    googleMap.addPolyline(polyline);
-    CameraUpdate loc = CameraUpdateFactory.newLatLngZoom(points.get(0), 17);
+    if (trail != null) {
+      googleMap.clear();
+      googleMap.addMarker(
+          new MarkerOptions().position(new LatLng(trail.getGeometry().getCoordinates()[0][1],
+              trail.getGeometry().getCoordinates()[0][0])).title(trail.getName()));
+      PolylineOptions polyline = new PolylineOptions();
+      List<LatLng> points = new ArrayList<>();
+      for (double[] coordinate : trail.getGeometry().getCoordinates()) {
+        LatLng latLng = new LatLng(coordinate[1], coordinate[0]);
+        points.add(latLng);
+        polyline.add(latLng);
+      }
+      polyline.color(0xffff0000);
+      googleMap.addPolyline(polyline);
+      CameraUpdate loc = CameraUpdateFactory.newLatLngZoom(points.get(0), 17);
 
-    googleMap.animateCamera(loc, 6000, null);
+      googleMap.animateCamera(loc, 6000, null);
+    }
+
 
   }
 
