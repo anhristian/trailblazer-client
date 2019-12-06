@@ -7,6 +7,7 @@ package io.trailblazer.trailblazerclient.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,6 +31,7 @@ public class TrailAdapter extends Adapter<Holder> {
   private final Context context;
   private final List<Trail> trails;
   private final OnClickListener clickListener;
+  private final OnContextClickListener contextClickListener;
 
   /**
    * Instantiates a new Trail adapter.
@@ -38,9 +40,11 @@ public class TrailAdapter extends Adapter<Holder> {
    * @param clickListener the click listener
    */
   public TrailAdapter(Context context,
-      OnClickListener clickListener) {
+      OnClickListener clickListener,
+      OnContextClickListener contextClickListener) {
     this.context = context;
     this.clickListener = clickListener;
+    this.contextClickListener = contextClickListener;
     this.trails = new ArrayList<>();
 
   }
@@ -89,6 +93,18 @@ public class TrailAdapter extends Adapter<Holder> {
     void onClick(View view, int position, Trail trail);
   }
 
+  public interface OnContextClickListener {
+
+    /**
+     * On click.
+     *
+     * @param position the position
+     * @param trail    the trail
+     */
+    void onLongClick(Menu menu, int position, Trail trail);
+  }
+
+
   /**
    * The type Holder.
    */
@@ -122,6 +138,9 @@ public class TrailAdapter extends Adapter<Holder> {
       view.setOnClickListener((view) -> {
         clickListener.onClick(view, position, trail);
       });
+
+      view.setOnCreateContextMenuListener((menu, v, menuInfo) ->
+          contextClickListener.onLongClick(menu, position, trail));
     }
   }
 

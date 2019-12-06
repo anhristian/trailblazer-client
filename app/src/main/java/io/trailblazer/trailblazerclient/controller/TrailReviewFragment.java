@@ -98,28 +98,31 @@ public class TrailReviewFragment extends DialogFragment implements OnMapReadyCal
   public void onMapReady(GoogleMap googleMap) {
     MapsInitializer.initialize(getContext());
     this.googleMap = googleMap;
+    LocatorService.getInstance().getUpdatedLocation().observe(this, location -> {
+      googleMap.setOnMapLoadedCallback(() -> {
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(locationToLatLng(location), 20));
+        LocatorService.getInstance().getLocationList().observe(this, locations -> {
+          if (locations.size() != 0) {
+            points = locationsToLatLng(locations);
+            googleMap.addMarker(new MarkerOptions().position(points.get(0)));
+            Builder bounds = new Builder();
+            for (LatLng point : points) {
+              bounds.include(point);
+            }
+            PolylineOptions polylineOptions = new PolylineOptions()
+                .color(Color.BLUE)
+                .jointType(JointType.ROUND);
 
-    googleMap.setOnMapLoadedCallback(() -> {
-      LocatorService.getInstance().getLocationList().observe(this, locations -> {
-        if (locations.size() != 0) {
-          points = locationsToLatLng(locations);
-          googleMap.addMarker(new MarkerOptions().position(points.get(0)));
-          Builder bounds = new Builder();
-          for (LatLng point : points) {
-            bounds.include(point);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 0));
+
+            googleMap.setOnMapLoadedCallback(() -> {
+              Polyline polyline = googleMap.addPolyline(polylineOptions);
+              polyline.setPoints(points);
+            });
           }
-          PolylineOptions polylineOptions = new PolylineOptions()
-              .color(Color.BLUE)
-              .jointType(JointType.ROUND);
-
-          googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 0));
-
-          googleMap.setOnMapLoadedCallback(() -> {
-            Polyline polyline = googleMap.addPolyline(polylineOptions);
-            polyline.setPoints(points);
-          });
-        }
+        });
       });
+
     });
 
   }
@@ -151,8 +154,12 @@ public class TrailReviewFragment extends DialogFragment implements OnMapReadyCal
     }
     geometry.setCoordinates(p);
     Log.d(TAG, "accept: " + trail);
+    trail.setGeometry(geometry);
     trailViewModel.postTrail(trail);
   }
 
+  private LatLng locationToLatLng(Location location) {
+    return new LatLng(location.getLatitude(), location.getLongitude());
+  }
 
 }

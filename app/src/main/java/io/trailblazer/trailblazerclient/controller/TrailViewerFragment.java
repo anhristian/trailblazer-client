@@ -7,6 +7,7 @@ package io.trailblazer.trailblazerclient.controller;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -23,13 +24,17 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener;
 import com.google.android.material.tabs.TabLayout.Tab;
 import io.trailblazer.trailblazerclient.R;
+import io.trailblazer.trailblazerclient.model.Trail;
 import io.trailblazer.trailblazerclient.view.TrailAdapter;
+import io.trailblazer.trailblazerclient.view.TrailAdapter.OnClickListener;
+import io.trailblazer.trailblazerclient.view.TrailAdapter.OnContextClickListener;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewModel;
 
 /**
  * The type Trail viewer fragment.
  */
-public class TrailViewerFragment extends Fragment {
+public class TrailViewerFragment extends Fragment implements OnContextClickListener,
+    OnClickListener {
 
   private RecyclerView recyclerView;
   private View view;
@@ -95,14 +100,7 @@ public class TrailViewerFragment extends Fragment {
 
     LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
     recyclerView.setLayoutManager(mLayoutManager);
-    trailAdapter = new TrailAdapter(getContext(), (v, position, trail) -> {
-      trailViewModel.getTrail(trail);
-      trailViewModel.getSingleTrail().observe(this, (t) -> {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("trail", trail);
-        Navigation.findNavController(view).navigate(R.id.map_nav, bundle);
-      });
-    });
+    trailAdapter = new TrailAdapter(getContext(), this, this);
     recyclerView.setAdapter(trailAdapter);
     getAllTrails();
 
@@ -122,11 +120,31 @@ public class TrailViewerFragment extends Fragment {
       trailAdapter.setTrails(trails);
       recyclerView.getAdapter().notifyDataSetChanged();
       recyclerView.scheduleLayoutAnimation();
-
     });
   }
 
 
+  @Override
+  public void onClick(View view, int position, Trail trail) {
+    trailViewModel.getTrail(trail);
+    trailViewModel.getSingleTrail().observe(this, (t) -> {
+      Bundle bundle = new Bundle();
+      bundle.putSerializable("trail", trail);
+      Navigation.findNavController(view).navigate(R.id.map_nav, bundle);
+    });
+  }
+
+  @Override
+  public void onLongClick(Menu menu, int position, Trail trail) {
+    getActivity().getMenuInflater().inflate(R.menu.trail_context, menu);
+    menu.findItem(R.id.delete_trail).setOnMenuItemClickListener(
+        (item) -> deleteTrail(trail));
+  }
+
+  private boolean deleteTrail(Trail trail) {
+    trailViewModel.deleteTrail(trail);
+    return true;
+  }
 }
 
 

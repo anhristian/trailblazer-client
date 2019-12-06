@@ -25,6 +25,7 @@ import java.util.List;
 
 public class TrailViewModel extends AndroidViewModel implements LifecycleObserver {
 
+  private static final String TAG = "TrailViewModel";
   private final MutableLiveData<Throwable> throwable;
   private final CompositeDisposable pending;
   private final MutableLiveData<GoogleSignInAccount> account;
@@ -78,6 +79,7 @@ public class TrailViewModel extends AndroidViewModel implements LifecycleObserve
   }
 
   public void postTrail(Trail trail) {
+    Log.d(TAG, "postTrail: " + trail);
     pending.add(
         NetworkService.getInstance().postTrail(getAuthorizationHeader(), trail)
             .subscribeOn(Schedulers.io())
@@ -118,4 +120,12 @@ public class TrailViewModel extends AndroidViewModel implements LifecycleObserve
     return myTrails;
   }
 
+  public void deleteTrail(Trail trail) {
+    String token = getAuthorizationHeader();
+    pending.add(NetworkService.getInstance().delete(token, trail.getId())
+        .subscribeOn(Schedulers.io())
+        .subscribe(this::refreshMyTrails, this.throwable::postValue)
+    );
+
+  }
 }

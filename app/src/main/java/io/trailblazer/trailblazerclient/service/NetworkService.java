@@ -12,6 +12,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.vividsolutions.jts.geom.Geometry;
+import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.trailblazer.trailblazerclient.BuildConfig;
@@ -20,10 +21,14 @@ import io.trailblazer.trailblazerclient.model.UserCharacteristics;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import okhttp3.logging.HttpLoggingInterceptor.Level;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -133,21 +138,25 @@ public interface NetworkService {
   @POST("trails")
   Single<Trail> postTrail(@Header("Authorization") String token, @Body Trail trail);
 
+  @DELETE("trails/{id}")
+  Completable delete(@Header("Authorization") String token, @Path("id") long id);
+
 
   /**
    * The type Instance holder.
    */
+
   class InstanceHolder {
 
 
     private static final NetworkService INSTANCE;
 
     static {
-//      HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//      interceptor.setLevel(Level.BODY);
-//      OkHttpClient client = new OkHttpClient.Builder()
-//          .addInterceptor(interceptor)
-//          .build();
+      HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+      interceptor.setLevel(Level.BODY);
+      OkHttpClient client = new OkHttpClient.Builder()
+          .addInterceptor(interceptor)
+          .build();
 
       Gson gson = new GsonBuilder()
           .excludeFieldsWithoutExposeAnnotation()
@@ -157,7 +166,7 @@ public interface NetworkService {
           .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
           .addConverterFactory(GsonConverterFactory.create(gson))
           .baseUrl(BuildConfig.BASE_URL)
-//          .client(client)
+          .client(client)
           .build();
       INSTANCE = retrofit.create(NetworkService.class);
     }
