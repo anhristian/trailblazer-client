@@ -46,7 +46,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
   private static final String TAG = "mapfragment";
   private static final int START_RAD = 2;
-  private static final int LINE_WIDTH = 8;
 
 
   private GoogleMap googleMap;
@@ -135,11 +134,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         .color(Color.BLUE)
         .jointType(JointType.ROUND);
 
-    //    polylineOptions.width(LINE_WIDTH);
 
     LocatorService.getInstance().requestCurrentLocation().addOnSuccessListener(location -> {
       CircleOptions startPoint = new CircleOptions();
-      startPoint.fillColor(0x5f0000ff)
+      startPoint.fillColor(Color.BLUE)
           .center(locationToLatLng(location))
           .radius(START_RAD)
           .strokeColor(0x9f0000f9);
@@ -151,11 +149,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   }
 
   private void newPoint(Location location) {
-    LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
-    points.add(loc);
-    currentMapping.setPoints(points);
-    CameraUpdate curr = CameraUpdateFactory.newLatLng(loc);
-    googleMap.animateCamera(curr);
+    if (currentMapping != null) {
+      LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+      points.add(loc);
+      currentMapping.setPoints(points);
+      CameraUpdate curr = CameraUpdateFactory.newLatLng(loc);
+      googleMap.animateCamera(curr);
+
+    }
   }
 
 
@@ -181,7 +182,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
   }
 
   private void graphSingleTrail(Trail trail) {
-    if (trail != null) {
+
+    if (trail != null && trail.getGeometry() != null) {
       googleMap.clear();
       googleMap.addMarker(
           new MarkerOptions().position(new LatLng(trail.getGeometry().getCoordinates()[0][1],

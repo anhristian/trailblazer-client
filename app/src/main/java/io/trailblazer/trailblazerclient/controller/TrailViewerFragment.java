@@ -7,6 +7,7 @@ package io.trailblazer.trailblazerclient.controller;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
@@ -14,6 +15,8 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SearchView.OnQueryTextListener;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -23,19 +26,25 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener;
 import com.google.android.material.tabs.TabLayout.Tab;
 import io.trailblazer.trailblazerclient.R;
+import io.trailblazer.trailblazerclient.model.Trail;
 import io.trailblazer.trailblazerclient.view.TrailAdapter;
+import io.trailblazer.trailblazerclient.view.TrailAdapter.OnClickListener;
+import io.trailblazer.trailblazerclient.view.TrailAdapter.OnContextClickListener;
 import io.trailblazer.trailblazerclient.viewmodel.TrailViewModel;
 
 /**
  * The type Trail viewer fragment.
  */
-public class TrailViewerFragment extends Fragment {
+public class TrailViewerFragment extends Fragment implements OnContextClickListener,
+    OnClickListener {
+
 
   private RecyclerView recyclerView;
   private View view;
   private TrailViewModel trailViewModel;
   private TrailAdapter trailAdapter;
   private TabLayout tabs;
+  private SearchView trailSearch;
 
 
   @Override
@@ -54,6 +63,7 @@ public class TrailViewerFragment extends Fragment {
   private void initViews() {
     recyclerView = view.findViewById(R.id.trail_view);
     tabs = view.findViewById(R.id.tabs);
+    trailSearch = view.findViewById(R.id.trail_search);
   }
 
   private void initListeners() {
@@ -83,6 +93,19 @@ public class TrailViewerFragment extends Fragment {
     trailViewModel.getThrowable().observe(this, (throwable) -> {
       Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
     });
+
+    trailSearch.setOnQueryTextListener(new OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        trailAdapter.getFilter().filter(query);
+        return false;
+      }
+
+      @Override
+      public boolean onQueryTextChange(String newText) {
+        return false;
+      }
+    });
   }
 
 
@@ -95,14 +118,7 @@ public class TrailViewerFragment extends Fragment {
 
     LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
     recyclerView.setLayoutManager(mLayoutManager);
-    trailAdapter = new TrailAdapter(getContext(), (v, position, trail) -> {
-      trailViewModel.getTrail(trail);
-      trailViewModel.getSingleTrail().observe(this, (t) -> {
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("trail", trail);
-        Navigation.findNavController(view).navigate(R.id.map_nav, bundle);
-      });
-    });
+    trailAdapter = new TrailAdapter(getContext(), this, this);
     recyclerView.setAdapter(trailAdapter);
     getAllTrails();
 
@@ -122,11 +138,31 @@ public class TrailViewerFragment extends Fragment {
       trailAdapter.setTrails(trails);
       recyclerView.getAdapter().notifyDataSetChanged();
       recyclerView.scheduleLayoutAnimation();
-
     });
   }
 
 
+  @Override
+  public void onClick(View view, int position, Trail trail) {
+    trailViewModel.getTrail(trail);
+    trailViewModel.getSingleTrail().observe(this, (t) -> {
+      Bundle bundle = new Bundle();
+      bundle.putSerializable("trail", trail);
+      Navigation.findNavController(view).navigate(R.id.map_nav, bundle);
+    });
+  }
+
+  @Override
+  public void onLongClick(Menu menu, int position, Trail trail) {
+    getActivity().getMenuInflater().inflate(R.menu.trail_context, menu);
+    menu.findItem(R.id.delete_trail).setOnMenuItemClickListener(
+        (item) -> deleteTrail(trail));
+  }
+
+  private boolean deleteTrail(Trail trail) {
+    trailViewModel.deleteTrail(trail);
+    return true;
+  }
 }
 
 

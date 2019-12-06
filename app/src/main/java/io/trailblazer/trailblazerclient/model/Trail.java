@@ -13,7 +13,8 @@ import java.io.Serializable;
  */
 public class Trail implements Serializable {
 
-  private static final long serialVersionUID = -6009093971113874346L;
+
+  private static final long serialVersionUID = -6806226205580239636L;
 
   @Expose
   private long id;
@@ -140,5 +141,18 @@ public class Trail implements Serializable {
    */
   public void setGeometry(Geometry geometry) {
     this.geometry = geometry;
+  }
+
+
+  @Override
+  public String toString() {
+    return "Trail{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", imageUrl='" + imageUrl + '\'' +
+        ", creator=" + creator +
+        ", geometry=" + geometry +
+        '}';
   }
 }

@@ -37,4 +37,5 @@
   <string name="new_trail">New trail...</string>
   <string name="cancel">Cancel</string>
   <string name="ok">OK</string>
+  <string name="delete_trail">Delete Trail</string>
 </resources>

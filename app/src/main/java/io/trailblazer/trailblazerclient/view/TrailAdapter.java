@@ -7,8 +7,11 @@ package io.trailblazer.trailblazerclient.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -24,12 +27,14 @@ import java.util.List;
 /**
  * The type Trail adapter.
  */
-public class TrailAdapter extends Adapter<Holder> {
+public class TrailAdapter extends Adapter<Holder> implements Filterable {
 
 
   private final Context context;
-  private final List<Trail> trails;
-  private final OnClickListener clickListener;
+  private List<Trail> trails;
+  private OnClickListener clickListener;
+  private OnContextClickListener contextClickListener;
+  private List<Trail> trailsListFiltered;
 
   /**
    * Instantiates a new Trail adapter.
@@ -38,10 +43,13 @@ public class TrailAdapter extends Adapter<Holder> {
    * @param clickListener the click listener
    */
   public TrailAdapter(Context context,
-      OnClickListener clickListener) {
+      OnClickListener clickListener,
+      OnContextClickListener contextClickListener) {
     this.context = context;
     this.clickListener = clickListener;
+    this.contextClickListener = contextClickListener;
     this.trails = new ArrayList<>();
+    trailsListFiltered = new ArrayList<>();
 
   }
 
@@ -89,6 +97,57 @@ public class TrailAdapter extends Adapter<Holder> {
     void onClick(View view, int position, Trail trail);
   }
 
+  public interface OnContextClickListener {
+
+    /**
+     * On click.
+     *
+     * @param position the position
+     * @param trail    the trail
+     */
+    void onLongClick(Menu menu, int position, Trail trail);
+  }
+
+  @Override
+  public Filter getFilter() {
+    return new Filter() {
+      @Override
+      protected FilterResults performFiltering(CharSequence charSequence) {
+        String charString = charSequence.toString();
+        trailsListFiltered.clear();
+        if (charString.isEmpty()) {
+          trailsListFiltered.addAll(trails);
+        } else {
+          List<Trail> filteredList = new ArrayList<>();
+          for (Trail row : trails) {
+
+            // name match condition. this might differ depending on your requirement
+            // here we are looking for name or phone number match
+            if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getName()
+                .contains(charSequence)) {
+              filteredList.add(row);
+            }
+          }
+
+          trailsListFiltered.addAll(filteredList);
+        }
+
+        FilterResults filterResults = new FilterResults();
+        filterResults.values = trailsListFiltered;
+        return filterResults;
+      }
+
+      @Override
+      protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+        setTrails((List<Trail>) filterResults.values);
+
+        // refresh the list with filtered data
+        notifyDataSetChanged();
+      }
+    };
+  }
+
+
   /**
    * The type Holder.
    */
@@ -122,7 +181,11 @@ public class TrailAdapter extends Adapter<Holder> {
       view.setOnClickListener((view) -> {
         clickListener.onClick(view, position, trail);
       });
+
+      view.setOnCreateContextMenuListener((menu, v, menuInfo) ->
+          contextClickListener.onLongClick(menu, position, trail));
     }
   }
+
 
 }
