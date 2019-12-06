@@ -15,6 +15,8 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.SearchView.OnQueryTextListener;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
@@ -36,11 +38,13 @@ import io.trailblazer.trailblazerclient.viewmodel.TrailViewModel;
 public class TrailViewerFragment extends Fragment implements OnContextClickListener,
     OnClickListener {
 
+
   private RecyclerView recyclerView;
   private View view;
   private TrailViewModel trailViewModel;
   private TrailAdapter trailAdapter;
   private TabLayout tabs;
+  private SearchView trailSearch;
 
 
   @Override
@@ -59,6 +63,7 @@ public class TrailViewerFragment extends Fragment implements OnContextClickListe
   private void initViews() {
     recyclerView = view.findViewById(R.id.trail_view);
     tabs = view.findViewById(R.id.tabs);
+    trailSearch = view.findViewById(R.id.trail_search);
   }
 
   private void initListeners() {
@@ -87,6 +92,19 @@ public class TrailViewerFragment extends Fragment implements OnContextClickListe
     });
     trailViewModel.getThrowable().observe(this, (throwable) -> {
       Toast.makeText(getContext(), throwable.getMessage(), Toast.LENGTH_LONG).show();
+    });
+
+    trailSearch.setOnQueryTextListener(new OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        trailAdapter.getFilter().filter(query);
+        return false;
+      }
+
+      @Override
+      public boolean onQueryTextChange(String newText) {
+        return false;
+      }
     });
   }
 
